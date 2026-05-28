@@ -1,0 +1,62 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="540" viewBox="0 0 960 540" role="img" aria-labelledby="title desc">
+  <title id="title">GoalPilot agent system design</title>
+  <desc id="desc">A diagram showing the user interface, perception, safety and memory, planner, action manager, and feedback loop.</desc>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#2f4b7c" />
+    </marker>
+    <style>
+      .bg { fill: #f7f9fd; }
+      .box { fill: #ffffff; stroke: #b9c7dc; stroke-width: 2; rx: 10; }
+      .blue { fill: #eaf1ff; stroke: #2754c5; }
+      .green { fill: #edf8f3; stroke: #177a5b; }
+      .amber { fill: #fff5e6; stroke: #a76100; }
+      .red { fill: #fff0ee; stroke: #b42318; }
+      .text { fill: #172033; font-family: Arial, sans-serif; font-size: 24px; font-weight: 700; }
+      .sub { fill: #5c667a; font-family: Arial, sans-serif; font-size: 16px; }
+      .line { stroke: #2f4b7c; stroke-width: 3; fill: none; marker-end: url(#arrow); }
+      .loop { stroke: #177a5b; stroke-width: 3; fill: none; stroke-dasharray: 9 7; marker-end: url(#arrow); }
+    </style>
+  </defs>
+
+  <rect class="bg" width="960" height="540" />
+
+  <rect class="box blue" x="36" y="205" width="170" height="110" />
+  <text class="text" x="72" y="252">User UI</text>
+  <text class="sub" x="59" y="282">goal, context,</text>
+  <text class="sub" x="71" y="304">feedback</text>
+
+  <rect class="box" x="265" y="70" width="190" height="120" />
+  <text class="text" x="303" y="119">Perception</text>
+  <text class="sub" x="292" y="150">extract facts,</text>
+  <text class="sub" x="285" y="172">deadline, outputs</text>
+
+  <rect class="box red" x="510" y="70" width="190" height="120" />
+  <text class="text" x="541" y="119">Safety Gate</text>
+  <text class="sub" x="540" y="150">detect harmful</text>
+  <text class="sub" x="562" y="172">requests</text>
+
+  <rect class="box amber" x="265" y="330" width="190" height="120" />
+  <text class="text" x="317" y="379">Memory</text>
+  <text class="sub" x="292" y="410">recent plans and</text>
+  <text class="sub" x="321" y="432">feedback</text>
+
+  <rect class="box green" x="510" y="330" width="190" height="120" />
+  <text class="text" x="553" y="379">Planner</text>
+  <text class="sub" x="535" y="410">classify, choose</text>
+  <text class="sub" x="550" y="432">strategy</text>
+
+  <rect class="box blue" x="754" y="205" width="170" height="110" />
+  <text class="text" x="786" y="252">Actions</text>
+  <text class="sub" x="787" y="282">plan, revise,</text>
+  <text class="sub" x="801" y="304">export</text>
+
+  <path class="line" d="M206 245 C230 190 245 145 265 130" />
+  <path class="line" d="M455 130 L510 130" />
+  <path class="line" d="M605 190 L605 330" />
+  <path class="line" d="M700 390 C740 355 765 317 786 315" />
+  <path class="line" d="M455 390 L510 390" />
+  <path class="line" d="M206 276 C238 318 252 363 265 390" />
+  <path class="loop" d="M836 315 C850 478 137 505 121 315" />
+  <text class="sub" x="370" y="502">Feedback updates memory and triggers replanning</text>
+</svg>

@@ -1,0 +1,10 @@
+# Local browser and OS files
+.DS_Store
+Thumbs.db
+
+# Generated test/export files
+goalpilot-agent-run.json
+
+# Temporary rendering files
+*.tmp
+*.log

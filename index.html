@@ -1,0 +1,133 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>GoalPilot Agent</title>
+    <link rel="stylesheet" href="src/styles.css" />
+  </head>
+  <body>
+    <main class="app-shell">
+      <header class="topbar">
+        <div>
+          <p class="eyebrow">Assignment 2 Prototype</p>
+          <h1>GoalPilot Agent</h1>
+          <p class="subtitle">An intelligent personal task-planning agent that perceives goals, reasons over constraints, and acts by producing an adaptive plan.</p>
+        </div>
+        <div class="agent-state" aria-live="polite">
+          <span class="state-dot"></span>
+          <span id="agentStatus">Ready</span>
+        </div>
+      </header>
+
+      <section class="workspace" aria-label="GoalPilot workspace">
+        <form class="panel input-panel" id="goalForm">
+          <div class="panel-heading">
+            <div>
+              <p class="eyebrow">Perception</p>
+              <h2>Goal input</h2>
+            </div>
+            <button class="icon-button" id="sampleButton" type="button" title="Load sample goal" aria-label="Load sample goal">+</button>
+          </div>
+
+          <label for="goal">Goal</label>
+          <textarea id="goal" rows="5" required placeholder="Example: Finish Assignment 2 by Sunday with a working software agent prototype and report."></textarea>
+
+          <label for="context">Context and constraints</label>
+          <textarea id="context" rows="4" placeholder="Mention deadline, available time, tools, preferences, risks, or missing information."></textarea>
+
+          <div class="form-grid">
+            <label>
+              Due date
+              <input id="dueDate" type="date" />
+            </label>
+            <label>
+              Available hours
+              <input id="hours" type="number" min="1" max="80" value="6" />
+            </label>
+          </div>
+
+          <label for="style">Planning style</label>
+          <select id="style">
+            <option value="balanced">Balanced</option>
+            <option value="fast">Fast and practical</option>
+            <option value="careful">Careful and low risk</option>
+            <option value="creative">Creative exploration</option>
+          </select>
+
+          <div class="button-row">
+            <button class="primary" type="submit">Generate plan</button>
+            <button class="secondary" id="resetButton" type="button">Reset</button>
+          </div>
+        </form>
+
+        <section class="panel output-panel" aria-label="Agent output">
+          <div class="panel-heading">
+            <div>
+              <p class="eyebrow">Reasoning loop</p>
+              <h2>Agent workspace</h2>
+            </div>
+            <button class="secondary compact" id="exportButton" type="button">Export JSON</button>
+          </div>
+
+          <div class="loop-grid">
+            <article class="surface">
+              <h3>Perceived facts</h3>
+              <ul id="factsList" class="fact-list">
+                <li>No goal has been analyzed yet.</li>
+              </ul>
+            </article>
+            <article class="surface">
+              <h3>Decision</h3>
+              <p id="decisionText">The agent is waiting for a goal.</p>
+            </article>
+          </div>
+
+          <article class="plan-surface">
+            <div class="section-title">
+              <h3>Action plan</h3>
+              <span id="confidenceBadge" class="badge">No plan</span>
+            </div>
+            <ol id="planList" class="plan-list">
+              <li class="empty-state">Generated steps will appear here.</li>
+            </ol>
+          </article>
+
+          <div class="feedback-row">
+            <input id="feedback" type="text" placeholder="Feedback: make it shorter, add testing, reduce risk, update deadline..." />
+            <button id="applyFeedbackButton" type="button" class="secondary">Apply feedback</button>
+            <button id="completeStepButton" type="button" class="secondary">Mark next done</button>
+          </div>
+        </section>
+
+        <aside class="panel memory-panel" aria-label="Memory and safety">
+          <div class="panel-heading">
+            <div>
+              <p class="eyebrow">State</p>
+              <h2>Memory and safety</h2>
+            </div>
+          </div>
+
+          <article class="surface safety">
+            <h3>Safety check</h3>
+            <p id="safetyText">No risky instruction detected.</p>
+          </article>
+
+          <article class="surface">
+            <h3>Memory</h3>
+            <ul id="memoryList" class="memory-list">
+              <li>Memory is empty.</li>
+            </ul>
+          </article>
+
+          <article class="surface">
+            <h3>Agent architecture</h3>
+            <img class="diagram-preview" src="assets/system-design.svg" alt="GoalPilot system design diagram" />
+          </article>
+        </aside>
+      </section>
+    </main>
+
+    <script src="src/agent.js"></script>
+  </body>
+</html>
