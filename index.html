@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>GoalPilot Agent</title>
+    <title>DataLens Agent</title>
     <link rel="stylesheet" href="src/styles.css" />
   </head>
   <body>
@@ -11,8 +11,8 @@
       <header class="topbar">
         <div>
           <p class="eyebrow">Assignment 2 Prototype</p>
-          <h1>GoalPilot Agent</h1>
-          <p class="subtitle">An intelligent personal task-planning agent that perceives goals, reasons over constraints, and acts by producing an adaptive plan.</p>
+          <h1>DataLens Agent</h1>
+          <p class="subtitle">A CSV data analysis agent that perceives a dataset, chooses analysis steps, executes them, creates plots, and summarizes findings.</p>
         </div>
         <div class="agent-state" aria-live="polite">
           <span class="state-dot"></span>
@@ -20,43 +20,27 @@
         </div>
       </header>
 
-      <section class="workspace" aria-label="GoalPilot workspace">
-        <form class="panel input-panel" id="goalForm">
+      <section class="workspace" aria-label="DataLens workspace">
+        <form class="panel input-panel" id="analysisForm">
           <div class="panel-heading">
             <div>
               <p class="eyebrow">Perception</p>
-              <h2>Goal input</h2>
+              <h2>CSV input</h2>
             </div>
-            <button class="icon-button" id="sampleButton" type="button" title="Load sample goal" aria-label="Load sample goal">+</button>
+            <button class="icon-button" id="sampleButton" type="button" title="Load sample CSV" aria-label="Load sample CSV">+</button>
           </div>
 
-          <label for="goal">Goal</label>
-          <textarea id="goal" rows="5" required placeholder="Example: Finish Assignment 2 by Sunday with a working software agent prototype and report."></textarea>
+          <label for="csvFile">Upload CSV</label>
+          <input id="csvFile" type="file" accept=".csv,text/csv" />
 
-          <label for="context">Context and constraints</label>
-          <textarea id="context" rows="4" placeholder="Mention deadline, available time, tools, preferences, risks, or missing information."></textarea>
+          <label for="question">Analysis goal</label>
+          <textarea id="question" rows="4" placeholder="Example: Find which region and channel perform best, identify trends, and summarize useful business actions."></textarea>
 
-          <div class="form-grid">
-            <label>
-              Due date
-              <input id="dueDate" type="date" />
-            </label>
-            <label>
-              Available hours
-              <input id="hours" type="number" min="1" max="80" value="6" />
-            </label>
-          </div>
-
-          <label for="style">Planning style</label>
-          <select id="style">
-            <option value="balanced">Balanced</option>
-            <option value="fast">Fast and practical</option>
-            <option value="careful">Careful and low risk</option>
-            <option value="creative">Creative exploration</option>
-          </select>
+          <label for="csvText">CSV preview or pasted CSV</label>
+          <textarea id="csvText" rows="10" required placeholder="Paste CSV data here, or click + to load the sample dataset."></textarea>
 
           <div class="button-row">
-            <button class="primary" type="submit">Generate plan</button>
+            <button class="primary" type="submit">Run analysis agent</button>
             <button class="secondary" id="resetButton" type="button">Reset</button>
           </div>
         </form>
@@ -64,53 +48,72 @@
         <section class="panel output-panel" aria-label="Agent output">
           <div class="panel-heading">
             <div>
-              <p class="eyebrow">Reasoning loop</p>
+              <p class="eyebrow">Reasoning and action</p>
               <h2>Agent workspace</h2>
             </div>
-            <button class="secondary compact" id="exportButton" type="button">Export JSON</button>
+            <button class="secondary compact" id="exportButton" type="button">Export analysis JSON</button>
           </div>
 
           <div class="loop-grid">
             <article class="surface">
-              <h3>Perceived facts</h3>
+              <h3>Perceived dataset</h3>
               <ul id="factsList" class="fact-list">
-                <li>No goal has been analyzed yet.</li>
+                <li>No CSV has been analyzed yet.</li>
               </ul>
             </article>
             <article class="surface">
               <h3>Decision</h3>
-              <p id="decisionText">The agent is waiting for a goal.</p>
+              <p id="decisionText">The agent is waiting for a dataset.</p>
             </article>
           </div>
 
           <article class="plan-surface">
             <div class="section-title">
-              <h3>Action plan</h3>
+              <h3>Chosen analysis steps</h3>
               <span id="confidenceBadge" class="badge">No plan</span>
             </div>
             <ol id="planList" class="plan-list">
-              <li class="empty-state">Generated steps will appear here.</li>
+              <li class="empty-state">The agent will choose analysis steps after reading the CSV.</li>
             </ol>
           </article>
 
-          <div class="feedback-row">
-            <input id="feedback" type="text" placeholder="Feedback: make it shorter, add testing, reduce risk, update deadline..." />
-            <button id="applyFeedbackButton" type="button" class="secondary">Apply feedback</button>
-            <button id="completeStepButton" type="button" class="secondary">Mark next done</button>
+          <div class="execution-grid">
+            <article class="surface">
+              <h3>Execution log</h3>
+              <ol id="executionLog" class="execution-list">
+                <li>No analysis tool has run yet.</li>
+              </ol>
+            </article>
+            <article class="surface">
+              <h3>Summary</h3>
+              <ul id="summaryList" class="summary-list">
+                <li>No findings yet.</li>
+              </ul>
+            </article>
           </div>
         </section>
 
-        <aside class="panel memory-panel" aria-label="Memory and safety">
+        <aside class="panel chart-panel" aria-label="Charts and memory">
           <div class="panel-heading">
             <div>
-              <p class="eyebrow">State</p>
-              <h2>Memory and safety</h2>
+              <p class="eyebrow">Actions</p>
+              <h2>Plots and memory</h2>
             </div>
           </div>
 
+          <article class="surface">
+            <h3>Main plot</h3>
+            <canvas id="barChart" width="520" height="320" aria-label="Main generated chart"></canvas>
+          </article>
+
+          <article class="surface">
+            <h3>Relationship plot</h3>
+            <canvas id="scatterChart" width="520" height="260" aria-label="Relationship chart"></canvas>
+          </article>
+
           <article class="surface safety">
             <h3>Safety check</h3>
-            <p id="safetyText">No risky instruction detected.</p>
+            <p id="safetyText">No risky data instruction detected.</p>
           </article>
 
           <article class="surface">
@@ -122,7 +125,7 @@
 
           <article class="surface">
             <h3>Agent architecture</h3>
-            <img class="diagram-preview" src="assets/system-design.svg" alt="GoalPilot system design diagram" />
+            <img class="diagram-preview" src="assets/system-design.svg" alt="DataLens system design diagram" />
           </article>
         </aside>
       </section>

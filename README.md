@@ -1,18 +1,18 @@
-# GoalPilot Agent
+# DataLens Agent
 
-GoalPilot is a small intelligent software agent prototype for Assignment 2. It accepts a user goal, perceives task facts, decides a planning strategy, produces concrete actions, remembers recent feedback, and applies safety boundaries when a request looks risky.
+DataLens is a small intelligent software agent prototype for Assignment 2. It takes a CSV file, perceives the dataset structure, chooses analysis steps, executes those steps, creates plots, and summarizes findings.
 
 ## Repository link
 
 Replace this line after uploading the folder to GitHub:
 
-`https://github.com/your-username/goalpilot-agent`
+`https://github.com/your-username/datalens-agent`
 
 ## Demo video
 
 Suggested GitHub README link after recording/uploading the two-minute demo:
 
-`demo/goalpilot_demo.mp4`
+`demo/datalens_demo.mp4`
 
 A short demo script is included at [demo/demo_script.md](demo/demo_script.md).
 
@@ -22,24 +22,27 @@ No installation is required.
 
 1. Download or clone this repository.
 2. Open [index.html](index.html) in a modern browser.
-3. Click the `+` button to load the sample Assignment 2 goal.
-4. Click `Generate plan`.
-5. Add feedback such as `add testing and screenshots`, then click `Apply feedback`.
-6. Click `Mark next done` to show the agent updating task state and memory.
+3. Click the `+` button to load the sample CSV, or upload your own `.csv` file.
+4. Click `Run analysis agent`.
+5. Review the perceived dataset, chosen analysis steps, execution log, plots, and summary findings.
+6. Click `Export analysis JSON` if you want to download the agent run state.
 
 ## Agent capabilities
 
-- Perception: extracts category, keywords, due date, deadline pressure, required outputs, and missing information.
-- Decision making: chooses a planning strategy based on deadline pressure, available hours, style preference, and safety state.
-- Action: creates an ordered plan, revises it from feedback, marks progress, and exports the current run as JSON.
-- Memory: stores recent planning and feedback events in `localStorage`.
-- Safety: detects unsafe or academically risky requests and redirects to a safe alternative plan.
+- Perception: parses CSV, counts rows and columns, infers numeric, categorical, and date fields, and detects missing cells.
+- Decision making: chooses analysis steps based on detected column types and the user's analysis goal.
+- Tool execution: runs schema inspection, numeric profiling, group comparison, relationship plotting, and summary generation.
+- Action: creates a bar chart, scatter plot, execution log, natural-language findings, and JSON export.
+- Memory: stores recent analysis events in `localStorage`.
+- Safety: refuses requests that appear to involve secrets or sensitive identifiers.
 
 ## Project structure
 
 ```text
 .
 |-- index.html
+|-- data/
+|   `-- sample_sales.csv
 |-- src/
 |   |-- agent.js
 |   `-- styles.css
@@ -55,12 +58,8 @@ No installation is required.
 
 ## Commit checkpoint guide
 
-The local repository contains checkpoint-style commits for:
-
-1. Initial prototype implementation.
-2. README and documentation materials.
-3. Report, screenshots, and final packaging.
+The local repository contains checkpoint-style commits showing design evolution and improvements. The final commit switches the project to the DataLens CSV analysis agent.
 
 ## Notes for submission
 
-Before final upload, create a GitHub repository, push this folder, update the repository link above, and record or upload the two-minute demo video. The generated PDF report is in [report/Assignment2_GoalPilot_Report.pdf](report/Assignment2_GoalPilot_Report.pdf).
+Before final upload, create a GitHub repository, push this folder, update the repository link above, and record or upload the two-minute demo video. The generated PDF report is in [report/Assignment2_DataLens_Report.pdf](report/Assignment2_DataLens_Report.pdf).

@@ -15,7 +15,7 @@ from reportlab.platypus import Paragraph
 ROOT = Path(__file__).resolve().parents[1]
 REPORT_DIR = ROOT / "report"
 SCREENSHOT_DIR = ROOT / "screenshots"
-PDF_PATH = REPORT_DIR / "Assignment2_GoalPilot_Report.pdf"
+PDF_PATH = REPORT_DIR / "Assignment2_DataLens_Report.pdf"
 
 
 PAGE_W, PAGE_H = letter
@@ -31,34 +31,14 @@ SOFT = colors.HexColor("#f5f7fb")
 
 
 styles = {
-    "body": ParagraphStyle(
-        "body",
-        fontName="Helvetica",
-        fontSize=9.2,
-        leading=12.2,
-        textColor=INK,
-        spaceAfter=4,
-    ),
-    "small": ParagraphStyle(
-        "small",
-        fontName="Helvetica",
-        fontSize=7.8,
-        leading=9.6,
-        textColor=MUTED,
-    ),
-    "h2": ParagraphStyle(
-        "h2",
-        fontName="Helvetica-Bold",
-        fontSize=12,
-        leading=14,
-        textColor=INK,
-    ),
+    "body": ParagraphStyle("body", fontName="Helvetica", fontSize=9.1, leading=12.1, textColor=INK),
+    "small": ParagraphStyle("small", fontName="Helvetica", fontSize=7.8, leading=9.5, textColor=MUTED),
 }
 
 
 def draw_paragraph(c: canvas.Canvas, text: str, x: float, y: float, width: float, style_name: str = "body") -> float:
     para = Paragraph(text, styles[style_name])
-    _, height = para.wrap(width, 120)
+    _, height = para.wrap(width, 160)
     para.drawOn(c, x, y - height)
     return y - height
 
@@ -80,7 +60,7 @@ def draw_title(c: canvas.Canvas, title: str, subtitle: str, page: int) -> None:
     c.drawRightString(PAGE_W - MARGIN, 0.35 * inch, f"Page {page} of 2")
 
 
-def draw_section_label(c: canvas.Canvas, text: str, x: float, y: float) -> None:
+def draw_section(c: canvas.Canvas, text: str, x: float, y: float) -> None:
     c.setFillColor(BLUE)
     c.setFont("Helvetica-Bold", 11.5)
     c.drawString(x, y, text)
@@ -94,9 +74,8 @@ def draw_box(c: canvas.Canvas, x: float, y: float, w: float, h: float, title: st
     c.setFont("Helvetica-Bold", 9.2)
     c.drawCentredString(x + w / 2, y + h - 18, title)
     c.setFillColor(MUTED)
-    c.setFont("Helvetica", 7.4)
-    lines = body.split("\n")
-    for i, line in enumerate(lines[:2]):
+    c.setFont("Helvetica", 7.5)
+    for i, line in enumerate(body.split("\n")[:2]):
         c.drawCentredString(x + w / 2, y + h - 32 - 10 * i, line)
 
 
@@ -127,39 +106,39 @@ def draw_architecture(c: canvas.Canvas, x: float, y: float, w: float, h: float) 
     c.setStrokeColor(LINE)
     c.roundRect(x, y, w, h, 8, fill=1, stroke=1)
 
-    box_w = 91
+    box_w = 92
     box_h = 52
     positions = {
-        "User UI": (x + 22, y + 93),
+        "CSV Input": (x + 22, y + 93),
         "Perception": (x + 153, y + 152),
         "Safety Gate": (x + 292, y + 152),
-        "Memory": (x + 153, y + 34),
-        "Planner": (x + 292, y + 34),
-        "Actions": (x + 428, y + 93),
+        "Step Selector": (x + 153, y + 34),
+        "Tool Layer": (x + 292, y + 34),
+        "Outputs": (x + 428, y + 93),
     }
     fills = {
-        "User UI": colors.HexColor("#eaf1ff"),
+        "CSV Input": colors.HexColor("#eaf1ff"),
         "Perception": colors.white,
         "Safety Gate": colors.HexColor("#fff0ee"),
-        "Memory": colors.HexColor("#fff5e6"),
-        "Planner": colors.HexColor("#edf8f3"),
-        "Actions": colors.HexColor("#eaf1ff"),
+        "Step Selector": colors.HexColor("#fff5e6"),
+        "Tool Layer": colors.HexColor("#edf8f3"),
+        "Outputs": colors.HexColor("#eaf1ff"),
     }
     strokes = {
-        "User UI": BLUE,
+        "CSV Input": BLUE,
         "Perception": LINE,
         "Safety Gate": RED,
-        "Memory": AMBER,
-        "Planner": GREEN,
-        "Actions": BLUE,
+        "Step Selector": AMBER,
+        "Tool Layer": GREEN,
+        "Outputs": BLUE,
     }
     bodies = {
-        "User UI": "goal, context\nfeedback",
-        "Perception": "extract facts\nand outputs",
-        "Safety Gate": "block or redirect\nrisky goals",
-        "Memory": "recent plans\nand feedback",
-        "Planner": "strategy and\nstep selection",
-        "Actions": "plan, revise\nexport state",
+        "CSV Input": "upload, paste\nor sample",
+        "Perception": "parse CSV\ninfer types",
+        "Safety Gate": "check sensitive\ndata requests",
+        "Step Selector": "choose stats,\nplots, summary",
+        "Tool Layer": "aggregate, stats\ncorrelation",
+        "Outputs": "plots, findings\nJSON export",
     }
 
     for title, (bx, by) in positions.items():
@@ -181,31 +160,31 @@ def draw_architecture(c: canvas.Canvas, x: float, y: float, w: float, h: float) 
         bx, by = positions[name]
         return bx + box_w / 2, by
 
-    draw_arrow(c, mid_right("User UI"), mid_left("Perception"))
+    draw_arrow(c, mid_right("CSV Input"), mid_left("Perception"))
     draw_arrow(c, mid_right("Perception"), mid_left("Safety Gate"))
-    draw_arrow(c, mid_bottom("Safety Gate"), mid_top("Planner"))
-    draw_arrow(c, mid_right("Memory"), mid_left("Planner"))
-    draw_arrow(c, mid_right("Planner"), mid_left("Actions"))
-    draw_arrow(c, (positions["Actions"][0] + 30, positions["Actions"][1]), (positions["Memory"][0] + 20, positions["Memory"][1]), GREEN)
+    draw_arrow(c, mid_bottom("Safety Gate"), mid_top("Tool Layer"))
+    draw_arrow(c, mid_right("Step Selector"), mid_left("Tool Layer"))
+    draw_arrow(c, mid_right("Tool Layer"), mid_left("Outputs"))
+    draw_arrow(c, mid_bottom("CSV Input"), mid_left("Step Selector"), GREEN)
 
     c.setFillColor(MUTED)
     c.setFont("Helvetica", 7.3)
-    c.drawCentredString(x + w / 2, y + 13, "Feedback updates memory, then the planner revises the next action.")
+    c.drawCentredString(x + w / 2, y + 13, "Memory stores dataset facts, selected tools, plots, and findings.")
 
 
 def prepare_report_images() -> dict[str, Path]:
+    source = SCREENSHOT_DIR / "01-datalens-analysis.png"
     crops = {
-        "plan": ("01-sample-plan.png", (300, 130, 965, 1285)),
-        "feedback": ("02-feedback-memory.png", (290, 135, 1245, 1600)),
-        "safety": ("03-safety-redirection.png", (290, 135, 1245, 1050)),
+        "workspace": (380, 185, 1045, 1240),
+        "charts": (1060, 190, 1415, 1210),
+        "summary": (400, 1215, 1045, 2075),
     }
     output = {}
-    for name, (filename, crop) in crops.items():
-        source = SCREENSHOT_DIR / filename
-        target = SCREENSHOT_DIR / f"report-{name}.png"
-        with Image.open(source) as image:
+    with Image.open(source) as image:
+        for name, crop in crops.items():
+            target = SCREENSHOT_DIR / f"report-datalens-{name}.png"
             image.crop(crop).save(target)
-        output[name] = target
+            output[name] = target
     return output
 
 
@@ -222,72 +201,73 @@ def image_in_frame(c: canvas.Canvas, path: Path, x: float, y: float, w: float, h
 
 
 def page_one(c: canvas.Canvas) -> None:
-    draw_title(c, "GoalPilot Agent Report", "An intelligent personal task-planning agent prototype", 1)
+    draw_title(c, "DataLens Agent Report", "CSV analysis agent that chooses steps, creates plots, and summarizes findings", 1)
     y = PAGE_H - 1.25 * inch
-    y = draw_paragraph(c, "<b>GitHub repository:</b> https://github.com/your-username/goalpilot-agent (replace with the uploaded repository URL before submission)", MARGIN, y, PAGE_W - 2 * MARGIN)
-    y = draw_paragraph(c, "<b>Prototype:</b> A browser-based agent that transforms a user goal into a concrete, adaptive action plan.", MARGIN, y - 4, PAGE_W - 2 * MARGIN)
+    y = draw_paragraph(c, "<b>GitHub repository:</b> https://github.com/your-username/datalens-agent (replace with the uploaded repository URL before submission)", MARGIN, y, PAGE_W - 2 * MARGIN)
+    y = draw_paragraph(c, "<b>Prototype:</b> A browser-based data analysis agent that accepts pasted or uploaded CSV data and runs an end-to-end analysis loop.", MARGIN, y - 4, PAGE_W - 2 * MARGIN)
 
-    draw_section_label(c, "System Design", MARGIN, y - 16)
+    draw_section(c, "System Design", MARGIN, y - 16)
     draw_architecture(c, MARGIN, y - 236, PAGE_W - 2 * MARGIN, 205)
 
-    y = y - 258
-    draw_section_label(c, "Design Explanation", MARGIN, y)
+    y -= 258
+    draw_section(c, "Design Explanation", MARGIN, y)
     y -= 14
     text = (
-        "GoalPilot follows a classic agent loop. The UI collects the user's goal, deadline, available hours, planning style, and feedback. "
-        "The perception module extracts task category, keywords, required outputs, missing information, and deadline pressure. "
-        "The safety gate checks for harmful or academically risky requests before planning. The planner chooses a strategy and decomposes the goal into ordered steps. "
-        "The action manager renders the plan, applies feedback, marks progress, and exports JSON. Memory stores recent events in localStorage so the agent can revise future behavior."
+        "DataLens follows a perceive-decide-act agent loop. The user provides a CSV and an analysis goal. "
+        "The perception module parses the CSV, infers numeric, categorical, and date columns, and checks missing values. "
+        "The safety gate blocks requests that appear to involve secrets or sensitive identifiers. "
+        "The decision module selects suitable analysis steps from the dataset shape. "
+        "The tool layer executes schema inspection, numeric profiling, category aggregation, relationship plotting, and summary generation."
     )
     y = draw_paragraph(c, text, MARGIN, y, PAGE_W - 2 * MARGIN)
 
-    draw_section_label(c, "Agent Concepts Used", MARGIN, y - 12)
+    draw_section(c, "Agent Concepts Used", MARGIN, y - 12)
     y -= 28
     bullets = [
-        "<b>Perception:</b> converts raw text input into structured facts.",
-        "<b>Decision making:</b> selects a planning strategy from deadline pressure, outputs, time, and style.",
-        "<b>Action:</b> generates, revises, completes, and exports a task plan.",
-        "<b>Memory:</b> remembers the latest plans, feedback, and progress events.",
-        "<b>Safety:</b> redirects unsafe or academic-integrity violating goals to legitimate alternatives.",
+        "<b>Perception:</b> parses CSV rows and infers column types.",
+        "<b>Decision making:</b> chooses analysis steps from available data types and user goal.",
+        "<b>Action:</b> executes analysis tools and draws charts on canvas.",
+        "<b>Memory:</b> records loaded datasets and executed tool runs in localStorage.",
+        "<b>Safety:</b> refuses analysis requests involving secrets or sensitive identifiers.",
     ]
     for bullet in bullets:
         y = draw_paragraph(c, f"- {bullet}", MARGIN + 8, y, PAGE_W - 2 * MARGIN - 8)
 
 
 def page_two(c: canvas.Canvas, images: dict[str, Path]) -> None:
-    draw_title(c, "Screenshots and System Behavior", "Evidence of perception, decision making, action, memory, and safety", 2)
+    draw_title(c, "Screenshots and System Behavior", "Evidence of CSV perception, step choice, plotting, execution, and summary", 2)
     y = PAGE_H - 1.25 * inch
-    y = draw_paragraph(c, "The screenshots below show the prototype running through three representative scenarios: normal planning, feedback-driven replanning, and safety redirection.", MARGIN, y, PAGE_W - 2 * MARGIN)
+    y = draw_paragraph(c, "The screenshots below show the DataLens agent running the bundled sales CSV sample. The agent chooses its analysis plan automatically from the detected fields.", MARGIN, y, PAGE_W - 2 * MARGIN)
 
-    top_y = y - 218
-    image_in_frame(c, images["plan"], MARGIN, top_y, 245, 200)
-    image_in_frame(c, images["feedback"], MARGIN + 265, top_y, 245, 200)
-    draw_paragraph(c, "<b>1. Generated plan:</b> the agent perceives the Assignment 2 goal, classifies it as an academic project, extracts outputs, and creates an ordered plan.", MARGIN, top_y - 12, 245, "small")
-    draw_paragraph(c, "<b>2. Feedback and memory:</b> after feedback, the plan gains testing, evidence, and safety documentation steps; progress updates are stored in memory.", MARGIN + 265, top_y - 12, 245, "small")
+    top_y = y - 220
+    image_in_frame(c, images["workspace"], MARGIN, top_y, 250, 200)
+    image_in_frame(c, images["charts"], MARGIN + 270, top_y, 240, 200)
+    draw_paragraph(c, "<b>1. Perception and decisions:</b> the agent detects 20 rows, numeric fields, categorical fields, and date fields, then chooses analysis steps.", MARGIN, top_y - 12, 250, "small")
+    draw_paragraph(c, "<b>2. Plot actions:</b> the agent creates a category comparison bar chart and a relationship scatter plot with correlation.", MARGIN + 270, top_y - 12, 240, "small")
 
-    safety_y = top_y - 242
-    image_in_frame(c, images["safety"], MARGIN, safety_y, 260, 190)
-    explanation_x = MARGIN + 278
-    draw_section_label(c, "How It Works", explanation_x, safety_y + 174)
-    detail_y = safety_y + 158
+    lower_y = top_y - 250
+    image_in_frame(c, images["summary"], MARGIN, lower_y, 260, 200)
+    detail_x = MARGIN + 280
+    draw_section(c, "How It Works", detail_x, lower_y + 184)
+    detail_y = lower_y + 166
     steps = [
-        "<b>Input:</b> the user provides a goal and constraints.",
-        "<b>Reasoning:</b> the agent extracts facts, estimates urgency, checks safety, then selects a strategy.",
-        "<b>Output:</b> the agent produces actionable steps with tags such as Perceive, Design, Act, Verify, and Safety.",
-        "<b>Adaptation:</b> feedback inserts or removes steps, while completed steps update the state.",
-        "<b>Safety:</b> unsafe requests, such as cheating, are redirected to ethical learning alternatives.",
+        "<b>Input:</b> user uploads, pastes, or loads a sample CSV.",
+        "<b>Perception:</b> CSV parser builds records and infers data types.",
+        "<b>Decision:</b> the agent chooses profiling, aggregation, plotting, and summary steps.",
+        "<b>Execution:</b> each selected tool runs and writes to the execution log.",
+        "<b>Output:</b> charts, findings, memory, and JSON export make the result reproducible.",
     ]
     for step in steps:
-        detail_y = draw_paragraph(c, f"- {step}", explanation_x, detail_y, PAGE_W - MARGIN - explanation_x)
+        detail_y = draw_paragraph(c, f"- {step}", detail_x, detail_y, PAGE_W - MARGIN - detail_x)
 
-    draw_paragraph(c, "<b>3. Safety redirection:</b> the safety gate refuses academic misconduct and changes the action plan to a legitimate support path.", MARGIN, safety_y - 12, 260, "small")
+    draw_paragraph(c, "<b>3. Summary:</b> findings explain top categories, numeric profiles, correlation, and recommended business action.", MARGIN, lower_y - 12, 260, "small")
 
 
 def main() -> None:
     REPORT_DIR.mkdir(exist_ok=True)
     images = prepare_report_images()
     c = canvas.Canvas(str(PDF_PATH), pagesize=letter)
-    c.setTitle("Assignment 2 - GoalPilot Agent Report")
+    c.setTitle("Assignment 2 - DataLens Agent Report")
     page_one(c)
     c.showPage()
     page_two(c, images)
