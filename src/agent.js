@@ -1,26 +1,30 @@
 const storageKey = "datalens.memory.v1";
 
-const sampleCsv = `Date,Region,Channel,Product,Revenue,Units,Customer_Satisfaction
-2026-01-03,North,Online,Starter,1250,37,4.2
-2026-01-07,South,Retail,Starter,980,29,3.9
-2026-01-12,East,Online,Pro,2210,41,4.6
-2026-01-16,West,Retail,Pro,1760,35,4.1
-2026-02-02,North,Partner,Starter,1430,33,4.0
-2026-02-06,South,Online,Pro,2480,46,4.7
-2026-02-11,East,Retail,Starter,1320,31,4.0
-2026-02-18,West,Online,Pro,2670,52,4.8
-2026-03-04,North,Online,Pro,2920,55,4.9
-2026-03-08,South,Partner,Starter,1160,28,3.8
-2026-03-14,East,Online,Starter,1540,38,4.3
-2026-03-19,West,Retail,Starter,1210,30,3.9
-2026-04-03,North,Retail,Pro,2140,40,4.4
-2026-04-09,South,Online,Starter,1710,42,4.2
-2026-04-15,East,Partner,Pro,2360,44,4.5
-2026-04-22,West,Online,Starter,1880,45,4.4
-2026-05-05,North,Partner,Pro,2550,48,4.6
-2026-05-11,South,Retail,Pro,1970,37,4.2
-2026-05-17,East,Online,Pro,3180,61,4.9
-2026-05-24,West,Partner,Starter,1490,34,4.1`;
+const sampleCsv = `total_bill,tip,sex,smoker,day,time,size
+16.99,1.01,Female,No,Sun,Dinner,2
+10.34,1.66,Male,No,Sun,Dinner,3
+21.01,3.5,Male,No,Sun,Dinner,3
+23.68,3.31,Male,No,Sun,Dinner,2
+24.59,3.61,Female,No,Sun,Dinner,4
+25.29,4.71,Male,No,Sun,Dinner,4
+20.65,3.35,Male,No,Sat,Dinner,3
+17.92,4.08,Male,No,Sat,Dinner,2
+20.29,2.75,Female,No,Sat,Dinner,2
+15.77,2.23,Female,No,Sat,Dinner,2
+39.42,7.58,Male,No,Sat,Dinner,4
+19.82,3.18,Male,No,Sat,Dinner,2
+27.2,4,Male,No,Thur,Lunch,4
+22.76,3,Male,No,Thur,Lunch,2
+17.29,2.71,Male,No,Thur,Lunch,2
+19.44,3,Male,Yes,Thur,Lunch,2
+16.66,3.4,Male,No,Thur,Lunch,2
+10.07,1.83,Female,No,Thur,Lunch,1
+28.97,3,Male,Yes,Fri,Dinner,2
+22.49,3.5,Male,No,Fri,Dinner,2
+5.75,1,Female,Yes,Fri,Dinner,2
+16.32,4.3,Female,Yes,Fri,Dinner,2
+22.75,3.25,Female,No,Fri,Dinner,2
+40.17,4.73,Male,Yes,Fri,Dinner,4`;
 
 const elements = {
   form: document.querySelector("#analysisForm"),
@@ -758,7 +762,7 @@ elements.csvFile.addEventListener("change", async (event) => {
 
 elements.sampleButton.addEventListener("click", () => {
   elements.csvText.value = sampleCsv;
-  elements.question.value = "Find which region and channel perform best, identify relationships, and summarize useful business actions.";
+  elements.question.value = "Compare restaurant bills and tips by day, identify relationships, and summarize useful findings.";
   agent.run(readInput());
 });
 

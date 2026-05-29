@@ -22,12 +22,12 @@ No installation is required.
 
 1. Download or clone this repository.
 2. Open [index.html](index.html) in a modern browser.
-3. Click the `+` button to load the sample CSV, or upload your own `.csv` file.
+3. Click the `+` button to load a small public `tips.csv` sample, or upload your own `.csv` file.
 4. Click `Run analysis agent`.
 5. Review the perceived dataset, chosen analysis steps, execution log, plots, and summary findings.
 6. Click `Export analysis JSON` if you want to download the agent run state.
 
-Extra comparison datasets are in [data](data): `iris.csv` and `tips.csv` can be uploaded through the file picker to show how the agent adapts to different CSV structures.
+Extra comparison datasets are in [data](data): `iris.csv` and the full `tips.csv` can be uploaded through the file picker to show how the agent adapts to different CSV structures.
 
 ## Agent capabilities
 
@@ -44,7 +44,8 @@ Extra comparison datasets are in [data](data): `iris.csv` and `tips.csv` can be 
 .
 |-- index.html
 |-- data/
-|   `-- sample_sales.csv
+|   |-- iris.csv
+|   `-- tips.csv
 |-- src/
 |   |-- agent.js
 |   `-- styles.css

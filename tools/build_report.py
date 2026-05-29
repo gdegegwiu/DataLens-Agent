@@ -237,12 +237,12 @@ def page_one(c: canvas.Canvas) -> None:
 def page_two(c: canvas.Canvas, images: dict[str, Path]) -> None:
     draw_title(c, "Screenshots and System Behavior", "Evidence of CSV perception, step choice, plotting, execution, and summary", 2)
     y = PAGE_H - 1.25 * inch
-    y = draw_paragraph(c, "The screenshots below show the DataLens agent running the bundled sales CSV sample. The agent chooses its analysis plan automatically from the detected fields.", MARGIN, y, PAGE_W - 2 * MARGIN)
+    y = draw_paragraph(c, "The screenshots below show the DataLens agent running a small public tips CSV sample. The agent chooses its analysis plan automatically from the detected fields.", MARGIN, y, PAGE_W - 2 * MARGIN)
 
     top_y = y - 220
     image_in_frame(c, images["workspace"], MARGIN, top_y, 250, 200)
     image_in_frame(c, images["charts"], MARGIN + 270, top_y, 240, 200)
-    draw_paragraph(c, "<b>1. Perception and decisions:</b> the agent detects 20 rows, numeric fields, categorical fields, and date fields, then chooses analysis steps.", MARGIN, top_y - 12, 250, "small")
+    draw_paragraph(c, "<b>1. Perception and decisions:</b> the agent detects 24 rows with numeric and categorical fields, then chooses analysis steps.", MARGIN, top_y - 12, 250, "small")
     draw_paragraph(c, "<b>2. Plot actions:</b> the agent creates a category comparison bar chart and a relationship scatter plot with correlation.", MARGIN + 270, top_y - 12, 240, "small")
 
     lower_y = top_y - 250
