@@ -22,10 +22,11 @@ No installation is required.
 
 1. Download or clone this repository.
 2. Open [index.html](index.html) in a modern browser.
-3. Click the `+` button to load a small public `tips.csv` sample, or upload your own `.csv` file.
-4. Click `Run analysis agent`.
-5. Review the perceived dataset, chosen analysis steps, execution log, plots, and summary findings.
-6. Click `Export analysis JSON` if you want to download the agent run state.
+3. Use the language selector to switch between English, Chinese, and Māori.
+4. Click the `+` button to load a small public `tips.csv` sample, or upload your own `.csv` file.
+5. Click `Run analysis agent`.
+6. Review the perceived dataset, chosen analysis steps, execution log, plots, and summary findings.
+7. Click `Export analysis JSON` if you want to download the agent run state.
 
 Extra comparison datasets are in [data](data): `iris.csv` and the full `tips.csv` can be uploaded through the file picker to show how the agent adapts to different CSV structures.
 
@@ -49,6 +50,7 @@ The API key is not stored in this repository. It is saved only in the current br
 - Action: creates a bar chart, scatter plot, execution log, LLM or deterministic natural-language findings, and JSON export.
 - Memory: stores recent analysis events in `localStorage`.
 - Safety: refuses requests that appear to involve secrets or sensitive identifiers.
+- Multilingual UI: supports English, Chinese, and Māori language switching for the web interface and deterministic agent output.
 
 ## Project structure
 

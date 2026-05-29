@@ -10,13 +10,23 @@
     <main class="app-shell">
       <header class="topbar">
         <div>
-          <p class="eyebrow">Assignment 2 Prototype</p>
+          <p class="eyebrow" data-i18n="eyebrow.assignment">Assignment 2 Prototype</p>
           <h1>DataLens Agent</h1>
-          <p class="subtitle">A CSV data analysis agent that perceives a dataset, chooses analysis steps, executes them, creates plots, and summarizes findings.</p>
+          <p class="subtitle" data-i18n="app.subtitle">A CSV data analysis agent that perceives a dataset, chooses analysis steps, executes them, creates plots, and summarizes findings.</p>
         </div>
-        <div class="agent-state" aria-live="polite">
-          <span class="state-dot"></span>
-          <span id="agentStatus">Ready</span>
+        <div class="top-actions">
+          <label class="language-control" for="languageSelect">
+            <span data-i18n="label.language">Language</span>
+            <select id="languageSelect">
+              <option value="en">English</option>
+              <option value="zh">中文</option>
+              <option value="mi">Te Reo Māori</option>
+            </select>
+          </label>
+          <div class="agent-state" aria-live="polite">
+            <span class="state-dot"></span>
+            <span id="agentStatus">Ready</span>
+          </div>
         </div>
       </header>
 
@@ -24,120 +34,120 @@
         <form class="panel input-panel" id="analysisForm">
           <div class="panel-heading">
             <div>
-              <p class="eyebrow">Perception</p>
-              <h2>CSV input</h2>
+              <p class="eyebrow" data-i18n="section.perception">Perception</p>
+              <h2 data-i18n="heading.csvInput">CSV input</h2>
             </div>
-            <button class="icon-button" id="sampleButton" type="button" title="Load sample CSV" aria-label="Load sample CSV">+</button>
+            <button class="icon-button" id="sampleButton" type="button" title="Load sample CSV" aria-label="Load sample CSV" data-i18n-title="button.sample" data-i18n-aria-label="button.sample">+</button>
           </div>
 
-          <label for="csvFile">Upload CSV</label>
+          <label for="csvFile" data-i18n="label.uploadCsv">Upload CSV</label>
           <input id="csvFile" type="file" accept=".csv,text/csv" />
 
-          <label for="question">Analysis goal</label>
-          <textarea id="question" rows="4" placeholder="Example: Find which region and channel perform best, identify trends, and summarize useful business actions."></textarea>
+          <label for="question" data-i18n="label.analysisGoal">Analysis goal</label>
+          <textarea id="question" rows="4" placeholder="Example: Find which region and channel perform best, identify trends, and summarize useful business actions." data-i18n-placeholder="placeholder.question"></textarea>
 
-          <label for="csvText">CSV preview or pasted CSV</label>
-          <textarea id="csvText" rows="10" required placeholder="Paste CSV data here, or click + to load the sample dataset."></textarea>
+          <label for="csvText" data-i18n="label.csvText">CSV preview or pasted CSV</label>
+          <textarea id="csvText" rows="10" required placeholder="Paste CSV data here, or click + to load the sample dataset." data-i18n-placeholder="placeholder.csv"></textarea>
 
-          <section class="llm-box" aria-label="LLM configuration">
+          <section class="llm-box" aria-label="LLM configuration" data-i18n-aria-label="aria.llmConfig">
             <label class="check-row" for="useLlm">
               <input id="useLlm" type="checkbox" />
-              Use LLM planner and summary
+              <span data-i18n="label.useLlm">Use LLM planner and summary</span>
             </label>
 
-            <label for="llmUrl">LLM API URL</label>
+            <label for="llmUrl" data-i18n="label.llmUrl">LLM API URL</label>
             <input id="llmUrl" type="url" value="https://sorryios.ai/codex" />
 
-            <label for="llmModel">Model</label>
+            <label for="llmModel" data-i18n="label.model">Model</label>
             <input id="llmModel" type="text" value="gpt-4o-mini" />
 
-            <label for="llmKey">API key</label>
-            <input id="llmKey" type="password" placeholder="Paste your API key here. It is stored only in this browser." autocomplete="off" />
+            <label for="llmKey" data-i18n="label.apiKey">API key</label>
+            <input id="llmKey" type="password" placeholder="Paste your API key here. It is stored only in this browser." autocomplete="off" data-i18n-placeholder="placeholder.apiKey" />
 
-            <p class="hint">The key is never committed to the project. If the LLM call fails, the agent falls back to deterministic analysis tools.</p>
+            <p class="hint" data-i18n="hint.llm">The key is never committed to the project. If the LLM call fails, the agent falls back to deterministic analysis tools.</p>
           </section>
 
           <div class="button-row">
-            <button class="primary" type="submit">Run analysis agent</button>
-            <button class="secondary" id="resetButton" type="button">Reset</button>
+            <button class="primary" type="submit" data-i18n="button.run">Run analysis agent</button>
+            <button class="secondary" id="resetButton" type="button" data-i18n="button.reset">Reset</button>
           </div>
         </form>
 
-        <section class="panel output-panel" aria-label="Agent output">
+        <section class="panel output-panel" aria-label="Agent output" data-i18n-aria-label="aria.agentOutput">
           <div class="panel-heading">
             <div>
-              <p class="eyebrow">Reasoning and action</p>
-              <h2>Agent workspace</h2>
+              <p class="eyebrow" data-i18n="section.reasoning">Reasoning and action</p>
+              <h2 data-i18n="heading.workspace">Agent workspace</h2>
             </div>
-            <button class="secondary compact" id="exportButton" type="button">Export analysis JSON</button>
+            <button class="secondary compact" id="exportButton" type="button" data-i18n="button.export">Export analysis JSON</button>
           </div>
 
           <div class="loop-grid">
             <article class="surface">
-              <h3>Perceived dataset</h3>
+              <h3 data-i18n="heading.perceived">Perceived dataset</h3>
               <ul id="factsList" class="fact-list">
-                <li>No CSV has been analyzed yet.</li>
+                <li data-i18n="empty.noCsv">No CSV has been analyzed yet.</li>
               </ul>
             </article>
             <article class="surface">
-              <h3>Decision</h3>
+              <h3 data-i18n="heading.decision">Decision</h3>
               <p id="decisionText">The agent is waiting for a dataset.</p>
             </article>
           </div>
 
           <article class="plan-surface">
             <div class="section-title">
-              <h3>Chosen analysis steps</h3>
+              <h3 data-i18n="heading.steps">Chosen analysis steps</h3>
               <span id="confidenceBadge" class="badge">No plan</span>
             </div>
             <ol id="planList" class="plan-list">
-              <li class="empty-state">The agent will choose analysis steps after reading the CSV.</li>
+              <li class="empty-state" data-i18n="empty.steps">The agent will choose analysis steps after reading the CSV.</li>
             </ol>
           </article>
 
           <div class="execution-grid">
             <article class="surface">
-              <h3>Execution log</h3>
+              <h3 data-i18n="heading.execution">Execution log</h3>
               <ol id="executionLog" class="execution-list">
-                <li>No analysis tool has run yet.</li>
+                <li data-i18n="empty.execution">No analysis tool has run yet.</li>
               </ol>
             </article>
             <article class="surface">
-              <h3>Summary</h3>
+              <h3 data-i18n="heading.summary">Summary</h3>
               <ul id="summaryList" class="summary-list">
-                <li>No findings yet.</li>
+                <li data-i18n="empty.findings">No findings yet.</li>
               </ul>
             </article>
           </div>
         </section>
 
-        <aside class="panel chart-panel" aria-label="Charts and memory">
+        <aside class="panel chart-panel" aria-label="Charts and memory" data-i18n-aria-label="aria.chartsMemory">
           <div class="panel-heading">
             <div>
-              <p class="eyebrow">Actions</p>
-              <h2>Plots and memory</h2>
+              <p class="eyebrow" data-i18n="section.actions">Actions</p>
+              <h2 data-i18n="heading.plotsMemory">Plots and memory</h2>
             </div>
           </div>
 
           <article class="surface">
-            <h3>Main plot</h3>
-            <canvas id="barChart" width="520" height="320" aria-label="Main generated chart"></canvas>
+            <h3 data-i18n="heading.mainPlot">Main plot</h3>
+            <canvas id="barChart" width="520" height="320" aria-label="Main generated chart" data-i18n-aria-label="aria.mainChart"></canvas>
           </article>
 
           <article class="surface">
-            <h3>Relationship plot</h3>
-            <canvas id="scatterChart" width="520" height="260" aria-label="Relationship chart"></canvas>
+            <h3 data-i18n="heading.relationshipPlot">Relationship plot</h3>
+            <canvas id="scatterChart" width="520" height="260" aria-label="Relationship chart" data-i18n-aria-label="aria.relationshipChart"></canvas>
           </article>
 
           <article class="surface safety">
-            <h3>Safety check</h3>
+            <h3 data-i18n="heading.safety">Safety check</h3>
             <p id="safetyText">No risky data instruction detected.</p>
           </article>
 
           <article class="surface">
-            <h3>Memory</h3>
+            <h3 data-i18n="heading.memory">Memory</h3>
             <ul id="memoryList" class="memory-list">
-              <li>Memory is empty.</li>
+              <li data-i18n="empty.memory">Memory is empty.</li>
             </ul>
           </article>
 
