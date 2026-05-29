@@ -100,6 +100,45 @@
               <h3 data-i18n="heading.steps">Chosen analysis steps</h3>
               <span id="confidenceBadge" class="badge">No plan</span>
             </div>
+            <section class="step-controls" aria-label="Analysis step options" data-i18n-aria-label="aria.stepOptions">
+              <div class="step-option-grid">
+                <label class="check-row step-option" for="stepInspect">
+                  <input id="stepInspect" name="analysisStep" type="checkbox" value="inspect_schema" checked />
+                  <span data-i18n="option.inspect">Schema and quality</span>
+                </label>
+                <label class="check-row step-option" for="stepNumeric">
+                  <input id="stepNumeric" name="analysisStep" type="checkbox" value="numeric_profile" checked />
+                  <span data-i18n="option.numeric">Numeric profile</span>
+                </label>
+                <label class="check-row step-option" for="stepGroup">
+                  <input id="stepGroup" name="analysisStep" type="checkbox" value="group_compare" checked />
+                  <span data-i18n="option.group">Group comparison</span>
+                </label>
+                <label class="check-row step-option" for="stepRelationship">
+                  <input id="stepRelationship" name="analysisStep" type="checkbox" value="relationship_plot" checked />
+                  <span data-i18n="option.relationship">Relationship plot</span>
+                </label>
+                <label class="check-row step-option" for="stepMissing">
+                  <input id="stepMissing" name="analysisStep" type="checkbox" value="missing_quality" />
+                  <span data-i18n="option.missing">Missing values</span>
+                </label>
+                <label class="check-row step-option" for="stepOutlier">
+                  <input id="stepOutlier" name="analysisStep" type="checkbox" value="outlier_scan" />
+                  <span data-i18n="option.outlier">Outlier scan</span>
+                </label>
+                <label class="check-row step-option" for="stepTrend">
+                  <input id="stepTrend" name="analysisStep" type="checkbox" value="trend_analysis" />
+                  <span data-i18n="option.trend">Trend analysis</span>
+                </label>
+                <label class="check-row step-option" for="stepSummary">
+                  <input id="stepSummary" name="analysisStep" type="checkbox" value="summarize_findings" checked />
+                  <span data-i18n="option.summary">Final summary</span>
+                </label>
+              </div>
+
+              <label class="step-custom-label" for="customStep" data-i18n="label.customStep">Custom analysis instruction</label>
+              <textarea id="customStep" rows="2" placeholder="Optional: ask the agent to check one extra pattern." data-i18n-placeholder="placeholder.customStep"></textarea>
+            </section>
             <ol id="planList" class="plan-list">
               <li class="empty-state" data-i18n="empty.steps">The agent will choose analysis steps after reading the CSV.</li>
             </ol>

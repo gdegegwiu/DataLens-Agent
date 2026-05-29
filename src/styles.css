@@ -382,6 +382,38 @@ select:focus {
   white-space: nowrap;
 }
 
+.step-controls {
+  margin: 0 0 14px;
+  padding: 12px 0 14px;
+  border-top: 1px solid #dce4f0;
+  border-bottom: 1px solid #dce4f0;
+}
+
+.step-option-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(128px, 1fr));
+  gap: 8px 12px;
+}
+
+.step-option {
+  align-items: flex-start;
+  margin: 0;
+  color: #314365;
+  font-weight: 680;
+}
+
+.step-option span {
+  line-height: 1.25;
+}
+
+.step-custom-label {
+  margin: 12px 0 6px;
+}
+
+#customStep {
+  min-height: 58px;
+}
+
 .plan-list {
   display: grid;
   gap: 10px;
@@ -516,6 +548,10 @@ canvas {
     grid-column: 1 / -1;
     order: 3;
   }
+
+  .step-option-grid {
+    grid-template-columns: repeat(2, minmax(140px, 1fr));
+  }
 }
 
 @media (max-width: 760px) {
@@ -556,6 +592,10 @@ canvas {
 
   .plan-list li {
     grid-template-columns: 30px minmax(0, 1fr);
+  }
+
+  .step-option-grid {
+    grid-template-columns: 1fr;
   }
 
   .step-tag {

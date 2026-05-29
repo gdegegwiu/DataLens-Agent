@@ -28,6 +28,18 @@ const sampleCsv = `total_bill,tip,sex,smoker,day,time,size
 22.75,3.25,Female,No,Fri,Dinner,2
 40.17,4.73,Male,Yes,Fri,Dinner,4`;
 
+const selectableToolIds = [
+  "inspect_schema",
+  "numeric_profile",
+  "group_compare",
+  "relationship_plot",
+  "missing_quality",
+  "outlier_scan",
+  "trend_analysis",
+  "summarize_findings"
+];
+const fallbackToolIds = ["inspect_schema", "numeric_profile", "summarize_findings"];
+
 let currentLanguage = localStorage.getItem(languageStorageKey) || "en";
 
 const translations = {
@@ -414,6 +426,123 @@ const translations = {
   }
 };
 
+Object.assign(translations.en, {
+  "aria.stepOptions": "Analysis step options",
+  "option.inspect": "Schema and quality",
+  "option.numeric": "Numeric profile",
+  "option.group": "Group comparison",
+  "option.relationship": "Relationship plot",
+  "option.missing": "Missing values",
+  "option.outlier": "Outlier scan",
+  "option.trend": "Trend analysis",
+  "option.summary": "Final summary",
+  "label.customStep": "Custom analysis instruction",
+  "placeholder.customStep": "Optional: ask the agent to check one extra pattern.",
+  "step.missing.title": "Check missing values by column",
+  "step.missing.detail": "List columns with missing cells and estimate the cleaning risk.",
+  "step.outlier.title": "Scan numeric outliers",
+  "step.outlier.detail": "Use the IQR rule to flag unusual numeric values.",
+  "step.trend.title": "Analyze metric trend over time",
+  "step.trend.detail": "Use the detected date column and main metric to compare first and latest periods.",
+  "step.custom.title": "Apply custom instruction",
+  "step.custom.detail": "Custom request: {instruction}",
+  "tool.missing.summary": "Checked missing values across {columns} column(s).",
+  "finding.missingClean": "Missing value check: no missing cells were found.",
+  "finding.missingColumns": "Missing value check: {details}.",
+  "tool.outlier.summary": "Scanned {columns} numeric column(s) for IQR outliers.",
+  "finding.outlierNone": "Outlier scan: no IQR outliers were detected in the numeric columns.",
+  "finding.outlierColumn": "{column}: {count} possible outlier(s), from {min} to {max}.",
+  "tool.trend.summary": "Analyzed {metric} over {date}.",
+  "tool.trend.unavailable": "Trend analysis skipped because a date column and numeric metric were not both available.",
+  "finding.trend": "{metric} changed from {first} in {firstDate} to {last} in {lastDate}.",
+  "finding.trendUnavailable": "Trend analysis needs at least one date column and one numeric metric.",
+  "tool.custom.summary": "Recorded and applied the custom analysis instruction.",
+  "finding.custom": "Custom instruction considered: {instruction}",
+  "finding.method": "The agent combined selected user steps with detected column types, then executed tools to produce plots and a summary.",
+  "tool.group.unavailable": "Group comparison skipped because a categorical dimension and numeric metric were not both available.",
+  "finding.groupUnavailable": "Group comparison needs at least one categorical column and one numeric column.",
+  "tool.relationship.unavailable": "Relationship plot skipped because fewer than two numeric columns were available.",
+  "finding.relationshipUnavailable": "Relationship plotting needs at least two numeric columns."
+});
+
+Object.assign(translations.zh, {
+  "aria.stepOptions": "分析步骤选项",
+  "option.inspect": "结构和质量",
+  "option.numeric": "数值概况",
+  "option.group": "分组对比",
+  "option.relationship": "关系图",
+  "option.missing": "缺失值",
+  "option.outlier": "异常值扫描",
+  "option.trend": "趋势分析",
+  "option.summary": "最终总结",
+  "label.customStep": "自定义分析说明",
+  "placeholder.customStep": "可选：让代理额外检查一个模式。",
+  "step.missing.title": "按列检查缺失值",
+  "step.missing.detail": "列出有缺失单元格的列，并估计清理风险。",
+  "step.outlier.title": "扫描数值异常值",
+  "step.outlier.detail": "使用 IQR 规则标记异常的数值。",
+  "step.trend.title": "分析指标随时间的趋势",
+  "step.trend.detail": "使用检测到的日期列和主要数值指标，对比最早与最新周期。",
+  "step.custom.title": "应用自定义说明",
+  "step.custom.detail": "自定义请求：{instruction}",
+  "tool.missing.summary": "已检查 {columns} 列的缺失值。",
+  "finding.missingClean": "缺失值检查：没有发现缺失单元格。",
+  "finding.missingColumns": "缺失值检查：{details}。",
+  "tool.outlier.summary": "已扫描 {columns} 个数值列的 IQR 异常值。",
+  "finding.outlierNone": "异常值扫描：数值列中没有检测到 IQR 异常值。",
+  "finding.outlierColumn": "{column}：{count} 个可能异常值，范围 {min} 到 {max}。",
+  "tool.trend.summary": "已分析 {metric} 随 {date} 的变化。",
+  "tool.trend.unavailable": "已跳过趋势分析，因为没有同时检测到日期列和数值指标。",
+  "finding.trend": "{metric} 从 {firstDate} 的 {first} 变化到 {lastDate} 的 {last}。",
+  "finding.trendUnavailable": "趋势分析至少需要一个日期列和一个数值列。",
+  "tool.custom.summary": "已记录并应用自定义分析说明。",
+  "finding.custom": "已考虑自定义说明：{instruction}",
+  "finding.method": "代理结合用户勾选的步骤和检测到的列类型，然后执行工具生成图表和总结。",
+  "tool.group.unavailable": "已跳过分组对比，因为没有同时检测到分类维度和数值指标。",
+  "finding.groupUnavailable": "分组对比至少需要一个分类列和一个数值列。",
+  "tool.relationship.unavailable": "已跳过关系图，因为可用数值列少于两个。",
+  "finding.relationshipUnavailable": "关系图至少需要两个数值列。"
+});
+
+Object.assign(translations.mi, {
+  "aria.stepOptions": "Kōwhiringa hipanga tātari",
+  "option.inspect": "Hanganga me te kounga",
+  "option.numeric": "Arotake tau",
+  "option.group": "Whakataurite rōpū",
+  "option.relationship": "Tūtohi hononga",
+  "option.missing": "Uara ngaro",
+  "option.outlier": "Tirotiro uara rerekē",
+  "option.trend": "Tātari ia",
+  "option.summary": "Whakarāpopoto whakamutunga",
+  "label.customStep": "Tohutohu tātari ritenga",
+  "placeholder.customStep": "Kōwhiri noa: tonoa te kaiāwhina kia tirohia tētahi tauira anō.",
+  "step.missing.title": "Tirohia ngā uara ngaro mā ia tīwae",
+  "step.missing.detail": "Whakarārangitia ngā tīwae whai pūtau ngaro, ā, aromātaihia te tūraru horoi.",
+  "step.outlier.title": "Tirotiro uara tau rerekē",
+  "step.outlier.detail": "Whakamahia te ture IQR hei tohu uara tau rerekē.",
+  "step.trend.title": "Tātari ia o te ine i te wā",
+  "step.trend.detail": "Whakamahia te tīwae rā me te ine matua hei whakataurite i ngā wā tuatahi me ngā wā hou.",
+  "step.custom.title": "Whakamahia te tohutohu ritenga",
+  "step.custom.detail": "Tono ritenga: {instruction}",
+  "tool.missing.summary": "I tirohia ngā uara ngaro puta noa i ngā tīwae {columns}.",
+  "finding.missingClean": "Arowhai uara ngaro: kāore he pūtau ngaro i kitea.",
+  "finding.missingColumns": "Arowhai uara ngaro: {details}.",
+  "tool.outlier.summary": "I tirohia ngā tīwae tau {columns} mō ngā uara rerekē IQR.",
+  "finding.outlierNone": "Tirotiro uara rerekē: kāore he uara rerekē IQR i kitea.",
+  "finding.outlierColumn": "{column}: {count} uara pea he rerekē, mai i {min} ki {max}.",
+  "tool.trend.summary": "I tātarihia {metric} mā {date}.",
+  "tool.trend.unavailable": "I whakakorea te tātari ia nā te kore tīwae rā me te ine tau e rua.",
+  "finding.trend": "I panoni {metric} mai i {first} i {firstDate} ki {last} i {lastDate}.",
+  "finding.trendUnavailable": "Me whai te tātari ia i tētahi tīwae rā me tētahi tīwae tau.",
+  "tool.custom.summary": "Kua tuhia, kua whakamahia hoki te tohutohu tātari ritenga.",
+  "finding.custom": "Kua whakaarohia te tohutohu ritenga: {instruction}",
+  "finding.method": "I whakakotahi te kaiāwhina i ngā hipanga kua tīpakohia me ngā momo tīwae kua kitea, kātahi ka whakahaere taputapu hei whakaputa tūtohi me te whakarāpopoto.",
+  "tool.group.unavailable": "I whakakorea te whakataurite rōpū nā te kore kāwai me te ine tau e rua.",
+  "finding.groupUnavailable": "Me whai te whakataurite rōpū i tētahi tīwae kāwai me tētahi tīwae tau.",
+  "tool.relationship.unavailable": "I whakakorea te tūtohi hononga nā te iti iho i te rua ngā tīwae tau.",
+  "finding.relationshipUnavailable": "Me whai te tūtohi hononga i ngā tīwae tau e rua neke atu."
+});
+
 if (!translations[currentLanguage]) {
   currentLanguage = "en";
 }
@@ -424,6 +553,7 @@ const elements = {
   csvFile: document.querySelector("#csvFile"),
   csvText: document.querySelector("#csvText"),
   question: document.querySelector("#question"),
+  customStep: document.querySelector("#customStep"),
   useLlm: document.querySelector("#useLlm"),
   llmUrl: document.querySelector("#llmUrl"),
   llmModel: document.querySelector("#llmModel"),
@@ -492,14 +622,14 @@ const agent = {
     const parsed = parseCsv(input.csv);
     const perception = this.perceive(parsed);
     let decision = this.decide(perception, input.question, safety);
-    let plan = this.chooseSteps(perception, safety);
+    let plan = this.chooseSteps(perception, safety, input.selectedSteps, input.customStep);
     const llm = { enabled: input.llm.enabled, used: false, error: "" };
 
     if (!safety.blocked && input.llm.enabled && input.llm.apiKey) {
       setStatus("status.askingLlm");
       try {
-        const llmPlan = await requestLlmPlan(perception, input.question, input.llm);
-        plan = normalizeLlmSteps(llmPlan.steps, plan);
+        const llmPlan = await requestLlmPlan(perception, input.question, input.llm, input.selectedSteps, input.customStep);
+        plan = normalizeLlmSteps(llmPlan.steps, plan, input.selectedSteps, Boolean(input.customStep));
         decision = {
           strategy: llmPlan.strategy || decision.strategy,
           confidence: clamp(Number(llmPlan.confidence) || decision.confidence, 0.5, 0.98),
@@ -518,6 +648,7 @@ const agent = {
     const state = {
       createdAt: new Date().toISOString(),
       question: input.question,
+      customStep: input.customStep,
       rows: parsed.rows,
       columns: parsed.headers,
       perception,
@@ -613,7 +744,7 @@ const agent = {
     };
   },
 
-  chooseSteps(perception, safety) {
+  chooseSteps(perception, safety, selectedSteps, customStep) {
     if (safety.blocked) {
       return [
         {
@@ -624,40 +755,22 @@ const agent = {
       ];
     }
 
-    const steps = [
-      {
-        title: t("step.inspect.title"),
-        detail: t("step.inspect.detail"),
-        tool: "inspect_schema"
-      },
-      {
-        title: t("step.numeric.title"),
-        detail: t("step.numeric.detail"),
-        tool: "numeric_profile"
+    const selected = normalizeSelectedToolIds(selectedSteps);
+    const steps = selected.map((toolId) => createPlanStep(toolId, perception)).filter(Boolean);
+
+    if (customStep) {
+      const customPlanStep = createPlanStep("custom_note", perception, customStep);
+      const summaryIndex = steps.findIndex((step) => step.tool === "summarize_findings");
+      if (summaryIndex === -1) {
+        steps.push(customPlanStep);
+      } else {
+        steps.splice(summaryIndex, 0, customPlanStep);
       }
-    ];
-
-    if (perception.likelyDimension && perception.likelyMetric) {
-      steps.push({
-        title: t("step.group.title", { metric: perception.likelyMetric.name, dimension: perception.likelyDimension.name }),
-        detail: t("step.group.detail"),
-        tool: "group_compare"
-      });
     }
 
-    if (perception.numeric.length >= 2) {
-      steps.push({
-        title: t("step.relationship.title", { x: perception.numeric[0].name, y: perception.numeric[1].name }),
-        detail: t("step.relationship.detail"),
-        tool: "relationship_plot"
-      });
+    if (!steps.length) {
+      steps.push(...fallbackToolIds.map((toolId) => createPlanStep(toolId, perception)).filter(Boolean));
     }
-
-    steps.push({
-      title: t("step.summary.title"),
-      detail: t("step.summary.detail"),
-      tool: "summarize_findings"
-    });
 
     return steps;
   },
@@ -734,6 +847,88 @@ const agent = {
   }
 };
 
+function normalizeSelectedToolIds(selectedSteps) {
+  if (!Array.isArray(selectedSteps)) {
+    return selectableToolIds.filter((toolId) => fallbackToolIds.includes(toolId));
+  }
+
+  const selected = new Set(selectedSteps);
+  return selectableToolIds.filter((toolId) => selected.has(toolId));
+}
+
+function allowedToolIds(selectedSteps, hasCustomStep) {
+  const ids = normalizeSelectedToolIds(selectedSteps);
+  if (hasCustomStep) {
+    ids.push("custom_note");
+  }
+  return ids.length ? ids : fallbackToolIds;
+}
+
+function createPlanStep(toolId, perception, customStep = "") {
+  switch (toolId) {
+    case "inspect_schema":
+      return {
+        title: t("step.inspect.title"),
+        detail: t("step.inspect.detail"),
+        tool: "inspect_schema"
+      };
+    case "numeric_profile":
+      return {
+        title: t("step.numeric.title"),
+        detail: t("step.numeric.detail"),
+        tool: "numeric_profile"
+      };
+    case "group_compare":
+      return {
+        title: perception.likelyMetric && perception.likelyDimension
+          ? t("step.group.title", { metric: perception.likelyMetric.name, dimension: perception.likelyDimension.name })
+          : t("option.group"),
+        detail: t("step.group.detail"),
+        tool: "group_compare"
+      };
+    case "relationship_plot":
+      return {
+        title: perception.numeric.length >= 2
+          ? t("step.relationship.title", { x: perception.numeric[0].name, y: perception.numeric[1].name })
+          : t("option.relationship"),
+        detail: t("step.relationship.detail"),
+        tool: "relationship_plot"
+      };
+    case "missing_quality":
+      return {
+        title: t("step.missing.title"),
+        detail: t("step.missing.detail"),
+        tool: "missing_quality"
+      };
+    case "outlier_scan":
+      return {
+        title: t("step.outlier.title"),
+        detail: t("step.outlier.detail"),
+        tool: "outlier_scan"
+      };
+    case "trend_analysis":
+      return {
+        title: t("step.trend.title"),
+        detail: t("step.trend.detail"),
+        tool: "trend_analysis"
+      };
+    case "summarize_findings":
+      return {
+        title: t("step.summary.title"),
+        detail: t("step.summary.detail"),
+        tool: "summarize_findings"
+      };
+    case "custom_note":
+      return {
+        title: t("step.custom.title"),
+        detail: t("step.custom.detail", { instruction: customStep }),
+        tool: "custom_note"
+      };
+    default:
+      return null;
+  }
+}
+
 const tools = {
   safety_filter(state) {
     return {
@@ -767,7 +962,21 @@ const tools = {
   group_compare(state) {
     const dimension = state.perception.likelyDimension;
     const metric = state.perception.likelyMetric;
+    if (!dimension || !metric) {
+      return {
+        summary: t("tool.group.unavailable"),
+        findings: [t("finding.groupUnavailable")]
+      };
+    }
+
     const grouped = aggregateByCategory(state.rows, dimension.name, metric.name);
+    if (!grouped.length) {
+      return {
+        summary: t("tool.group.unavailable"),
+        findings: [t("finding.groupUnavailable")]
+      };
+    }
+
     state.charts.grouped = { dimension: dimension.name, metric: metric.name, grouped };
     drawBarChart(elements.barChart, grouped, t("chart.by", { metric: metric.name, dimension: dimension.name }), metric.name);
 
@@ -786,9 +995,23 @@ const tools = {
   relationship_plot(state) {
     const xColumn = state.perception.numeric[0];
     const yColumn = state.perception.numeric[1];
+    if (!xColumn || !yColumn) {
+      return {
+        summary: t("tool.relationship.unavailable"),
+        findings: [t("finding.relationshipUnavailable")]
+      };
+    }
+
     const points = state.rows
       .map((row) => ({ x: toNumber(row[xColumn.name]), y: toNumber(row[yColumn.name]) }))
       .filter((point) => Number.isFinite(point.x) && Number.isFinite(point.y));
+    if (points.length < 2) {
+      return {
+        summary: t("tool.relationship.unavailable"),
+        findings: [t("finding.relationshipUnavailable")]
+      };
+    }
+
     const r = correlation(points.map((point) => point.x), points.map((point) => point.y));
     state.charts.relationship = { x: xColumn.name, y: yColumn.name, correlation: r };
     drawScatterChart(elements.scatterChart, points, xColumn.name, yColumn.name, r);
@@ -796,6 +1019,85 @@ const tools = {
     return {
       summary: t("tool.relationship.summary", { x: xColumn.name, y: yColumn.name }),
       findings: [t("finding.relationship", { x: xColumn.name, y: yColumn.name, r: formatNumber(r) })]
+    };
+  },
+
+  missing_quality(state) {
+    const missingColumns = state.perception.columns
+      .filter((column) => column.missing > 0)
+      .map((column) => `${column.name}: ${column.missing}`);
+
+    return {
+      summary: t("tool.missing.summary", { columns: state.perception.columnCount }),
+      findings: [
+        missingColumns.length
+          ? t("finding.missingColumns", { details: missingColumns.join(", ") })
+          : t("finding.missingClean")
+      ]
+    };
+  },
+
+  outlier_scan(state) {
+    const findings = state.perception.numeric
+      .map((column) => {
+        const values = getNumericValues(state.rows, column.name);
+        const outliers = findOutliers(values);
+        if (!outliers.length) {
+          return null;
+        }
+        return t("finding.outlierColumn", {
+          column: column.name,
+          count: outliers.length,
+          min: formatNumber(Math.min(...outliers)),
+          max: formatNumber(Math.max(...outliers))
+        });
+      })
+      .filter(Boolean);
+
+    return {
+      summary: t("tool.outlier.summary", { columns: state.perception.numeric.length }),
+      findings: findings.length ? findings : [t("finding.outlierNone")]
+    };
+  },
+
+  trend_analysis(state) {
+    const dateColumn = state.perception.likelyDate;
+    const metric = state.perception.likelyMetric;
+    if (!dateColumn || !metric) {
+      return {
+        summary: t("tool.trend.unavailable"),
+        findings: [t("finding.trendUnavailable")]
+      };
+    }
+
+    const trend = aggregateByDate(state.rows, dateColumn.name, metric.name);
+    if (trend.length < 2) {
+      return {
+        summary: t("tool.trend.unavailable"),
+        findings: [t("finding.trendUnavailable")]
+      };
+    }
+
+    const first = trend[0];
+    const last = trend[trend.length - 1];
+    return {
+      summary: t("tool.trend.summary", { metric: metric.name, date: dateColumn.name }),
+      findings: [
+        t("finding.trend", {
+          metric: metric.name,
+          first: formatNumber(first.value),
+          firstDate: first.label,
+          last: formatNumber(last.value),
+          lastDate: last.label
+        })
+      ]
+    };
+  },
+
+  custom_note(state) {
+    return {
+      summary: t("tool.custom.summary"),
+      findings: [t("finding.custom", { instruction: state.customStep })]
     };
   },
 
@@ -1068,6 +1370,50 @@ function describe(values) {
   };
 }
 
+function quantile(sortedValues, q) {
+  if (!sortedValues.length) {
+    return 0;
+  }
+  const index = (sortedValues.length - 1) * q;
+  const lower = Math.floor(index);
+  const upper = Math.ceil(index);
+  const weight = index - lower;
+  return sortedValues[lower] * (1 - weight) + sortedValues[upper] * weight;
+}
+
+function findOutliers(values) {
+  if (values.length < 4) {
+    return [];
+  }
+  const sorted = [...values].sort((a, b) => a - b);
+  const q1 = quantile(sorted, 0.25);
+  const q3 = quantile(sorted, 0.75);
+  const iqr = q3 - q1;
+  if (iqr === 0) {
+    return [];
+  }
+  const lower = q1 - 1.5 * iqr;
+  const upper = q3 + 1.5 * iqr;
+  return values.filter((value) => value < lower || value > upper);
+}
+
+function aggregateByDate(rows, dateName, metricName) {
+  const totals = new Map();
+  rows.forEach((row) => {
+    const date = new Date(row[dateName]);
+    const value = toNumber(row[metricName]);
+    if (Number.isNaN(date.getTime()) || !Number.isFinite(value)) {
+      return;
+    }
+    const label = date.toISOString().slice(0, 10);
+    totals.set(label, (totals.get(label) || 0) + value);
+  });
+
+  return [...totals.entries()]
+    .map(([label, value]) => ({ label, value }))
+    .sort((a, b) => a.label.localeCompare(b.label));
+}
+
 function correlation(xs, ys) {
   const n = Math.min(xs.length, ys.length);
   if (n < 2) {
@@ -1230,8 +1576,8 @@ function formatCompact(value) {
   return Number(value).toLocaleString(undefined, { notation: "compact", maximumFractionDigits: 1 });
 }
 
-async function requestLlmPlan(perception, question, config) {
-  const allowedTools = ["inspect_schema", "numeric_profile", "group_compare", "relationship_plot", "summarize_findings"];
+async function requestLlmPlan(perception, question, config, selectedSteps, customStep) {
+  const allowedTools = allowedToolIds(selectedSteps, Boolean(customStep));
   const schema = {
     rows: perception.rowCount,
     columns: perception.columns.map((column) => ({
@@ -1250,7 +1596,12 @@ async function requestLlmPlan(perception, question, config) {
     },
     {
       role: "user",
-      content: JSON.stringify({ question, dataset: schema }, null, 2)
+      content: JSON.stringify({
+        question,
+        customInstruction: customStep || null,
+        selectedTools: allowedTools,
+        dataset: schema
+      }, null, 2)
     }
   ];
   const text = await callChatCompletion(config, messages, 0.2);
@@ -1342,8 +1693,8 @@ function parseLlmJson(text) {
   }
 }
 
-function normalizeLlmSteps(steps, fallback) {
-  const allowed = new Set(["inspect_schema", "numeric_profile", "group_compare", "relationship_plot", "summarize_findings"]);
+function normalizeLlmSteps(steps, fallback, selectedSteps, hasCustomStep) {
+  const allowed = new Set(allowedToolIds(selectedSteps, hasCustomStep));
   const clean = Array.isArray(steps)
     ? steps
         .filter((step) => allowed.has(step.tool))
@@ -1358,8 +1709,19 @@ function normalizeLlmSteps(steps, fallback) {
     return fallback;
   }
 
-  if (!clean.some((step) => step.tool === "summarize_findings")) {
-    clean.push(fallback.find((step) => step.tool === "summarize_findings"));
+  const fallbackSummary = fallback.find((step) => step.tool === "summarize_findings");
+  if (allowed.has("summarize_findings") && fallbackSummary && !clean.some((step) => step.tool === "summarize_findings")) {
+    clean.push(fallbackSummary);
+  }
+
+  const fallbackCustom = fallback.find((step) => step.tool === "custom_note");
+  if (allowed.has("custom_note") && fallbackCustom && !clean.some((step) => step.tool === "custom_note")) {
+    const summaryIndex = clean.findIndex((step) => step.tool === "summarize_findings");
+    if (summaryIndex === -1) {
+      clean.push(fallbackCustom);
+    } else {
+      clean.splice(summaryIndex, 0, fallbackCustom);
+    }
   }
 
   return clean.filter(Boolean);
@@ -1397,6 +1759,8 @@ function readInput() {
   return {
     csv: elements.csvText.value.trim(),
     question: elements.question.value.trim() || t("fallback.question"),
+    selectedSteps: [...document.querySelectorAll('input[name="analysisStep"]:checked')].map((input) => input.value),
+    customStep: elements.customStep.value.trim(),
     llm
   };
 }

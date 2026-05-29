@@ -177,7 +177,7 @@ def prepare_report_images() -> dict[str, Path]:
     crops = {
         "workspace": (380, 185, 1045, 1240),
         "charts": (1060, 190, 1415, 1210),
-        "summary": (400, 1215, 1045, 2075),
+        "summary": (400, 1980, 1045, 3070),
     }
     output = {}
     with Image.open(source) as image:
@@ -216,8 +216,8 @@ def page_one(c: canvas.Canvas) -> None:
         "DataLens follows a perceive-decide-act agent loop. The user provides a CSV and an analysis goal. "
         "The perception module parses the CSV, infers numeric, categorical, and date columns, and checks missing values. "
         "The safety gate blocks requests that appear to involve secrets or sensitive identifiers. "
-        "The optional LLM planner selects suitable analysis steps from the dataset shape and user goal; if it is unavailable, deterministic rules select the same local tools. "
-        "The tool layer executes schema inspection, numeric profiling, category aggregation, relationship plotting, and summary generation."
+        "The optional LLM planner selects suitable analysis steps from the dataset shape, user goal, and checked options; if it is unavailable, deterministic rules select local tools. "
+        "The tool layer executes schema inspection, numeric profiling, category aggregation, relationship plotting, missing-value checks, outlier scans, trend checks, custom notes, and summary generation."
     )
     y = draw_paragraph(c, text, MARGIN, y, PAGE_W - 2 * MARGIN)
 
@@ -225,8 +225,8 @@ def page_one(c: canvas.Canvas) -> None:
     y -= 28
     bullets = [
         "<b>Perception:</b> parses CSV rows and infers column types.",
-        "<b>Decision making:</b> optionally uses an LLM planner, with deterministic fallback, to choose analysis steps.",
-        "<b>Action:</b> executes local analysis tools, draws charts on canvas, and can use the LLM to rewrite the final summary.",
+        "<b>Decision making:</b> optionally uses an LLM planner, with deterministic fallback, to choose or refine selected analysis steps.",
+        "<b>Action:</b> executes local analysis tools, draws charts on canvas, handles optional custom instructions, and can use the LLM to rewrite the final summary.",
         "<b>Memory:</b> records loaded datasets, LLM/fallback status, and executed tool runs in localStorage.",
         "<b>Safety:</b> refuses analysis requests involving secrets or sensitive identifiers.",
     ]
@@ -237,7 +237,7 @@ def page_one(c: canvas.Canvas) -> None:
 def page_two(c: canvas.Canvas, images: dict[str, Path]) -> None:
     draw_title(c, "Screenshots and System Behavior", "Evidence of CSV perception, step choice, plotting, execution, and summary", 2)
     y = PAGE_H - 1.25 * inch
-    y = draw_paragraph(c, "The screenshots below show the DataLens agent running a small public tips CSV sample. The agent chooses its analysis plan automatically from the detected fields.", MARGIN, y, PAGE_W - 2 * MARGIN)
+    y = draw_paragraph(c, "The screenshots below show the DataLens agent running a small public tips CSV sample. The agent combines detected fields with selected analysis options, then executes each step.", MARGIN, y, PAGE_W - 2 * MARGIN)
 
     top_y = y - 220
     image_in_frame(c, images["workspace"], MARGIN, top_y, 250, 200)
@@ -253,7 +253,7 @@ def page_two(c: canvas.Canvas, images: dict[str, Path]) -> None:
     steps = [
         "<b>Input:</b> user uploads, pastes, or loads a sample CSV.",
         "<b>Perception:</b> CSV parser builds records and infers data types.",
-        "<b>Decision:</b> the agent chooses profiling, aggregation, plotting, and summary steps.",
+        "<b>Decision:</b> the agent uses checked options and detected fields to choose profiling, aggregation, plotting, quality, custom, and summary steps.",
         "<b>Execution:</b> each selected tool runs and writes to the execution log.",
         "<b>Output:</b> charts, findings, memory, and JSON export make the result reproducible.",
     ]
