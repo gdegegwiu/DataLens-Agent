@@ -22,6 +22,7 @@ Point to the chosen analysis steps and execution log. Explain:
 
 - The agent chose schema inspection, numeric profiling, category comparison, relationship plotting, and summary generation.
 - These are selected automatically from the detected column types.
+- If LLM mode is enabled, the model chooses the analysis plan and writes the final summary; if it is disabled or unavailable, the deterministic fallback still works.
 
 ## 1:15-1:40 - Show plots
 

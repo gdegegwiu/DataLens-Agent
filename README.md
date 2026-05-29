@@ -29,12 +29,24 @@ No installation is required.
 
 Extra comparison datasets are in [data](data): `iris.csv` and the full `tips.csv` can be uploaded through the file picker to show how the agent adapts to different CSV structures.
 
+## Optional LLM mode
+
+The agent can run without an LLM, but it also supports an OpenAI-compatible chat-completions API.
+
+1. Tick `Use LLM planner and summary`.
+2. Keep the default API URL `https://sorryios.ai/codex`, or enter another compatible endpoint.
+3. Enter the model name, such as `gpt-4o-mini`.
+4. Paste the API key in the browser field.
+5. Run the analysis.
+
+The API key is not stored in this repository. It is saved only in the current browser's `localStorage` for convenience. If the LLM request fails, the app continues with the deterministic local analysis tools.
+
 ## Agent capabilities
 
 - Perception: parses CSV, counts rows and columns, infers numeric, categorical, and date fields, and detects missing cells.
-- Decision making: chooses analysis steps based on detected column types and the user's analysis goal.
+- Decision making: uses the optional LLM planner when configured; otherwise chooses analysis steps with deterministic rules based on detected column types and the user's analysis goal.
 - Tool execution: runs schema inspection, numeric profiling, group comparison, relationship plotting, and summary generation.
-- Action: creates a bar chart, scatter plot, execution log, natural-language findings, and JSON export.
+- Action: creates a bar chart, scatter plot, execution log, LLM or deterministic natural-language findings, and JSON export.
 - Memory: stores recent analysis events in `localStorage`.
 - Safety: refuses requests that appear to involve secrets or sensitive identifiers.
 

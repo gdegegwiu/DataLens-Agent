@@ -1,4 +1,5 @@
 const storageKey = "datalens.memory.v1";
+const llmStorageKey = "datalens.llm.config.v1";
 
 const sampleCsv = `total_bill,tip,sex,smoker,day,time,size
 16.99,1.01,Female,No,Sun,Dinner,2
@@ -31,6 +32,10 @@ const elements = {
   csvFile: document.querySelector("#csvFile"),
   csvText: document.querySelector("#csvText"),
   question: document.querySelector("#question"),
+  useLlm: document.querySelector("#useLlm"),
+  llmUrl: document.querySelector("#llmUrl"),
+  llmModel: document.querySelector("#llmModel"),
+  llmKey: document.querySelector("#llmKey"),
   status: document.querySelector("#agentStatus"),
   factsList: document.querySelector("#factsList"),
   decisionText: document.querySelector("#decisionText"),
@@ -52,13 +57,34 @@ const agent = {
   memory: loadMemory(),
   current: null,
 
-  run(input) {
+  async run(input) {
     elements.status.textContent = "Parsing CSV";
     const safety = this.checkSafety(input.question);
     const parsed = parseCsv(input.csv);
     const perception = this.perceive(parsed);
-    const decision = this.decide(perception, input.question, safety);
-    const plan = this.chooseSteps(perception, safety);
+    let decision = this.decide(perception, input.question, safety);
+    let plan = this.chooseSteps(perception, safety);
+    const llm = { enabled: input.llm.enabled, used: false, error: "" };
+
+    if (!safety.blocked && input.llm.enabled && input.llm.apiKey) {
+      elements.status.textContent = "Asking LLM";
+      try {
+        const llmPlan = await requestLlmPlan(perception, input.question, input.llm);
+        plan = normalizeLlmSteps(llmPlan.steps, plan);
+        decision = {
+          strategy: llmPlan.strategy || decision.strategy,
+          confidence: clamp(Number(llmPlan.confidence) || decision.confidence, 0.5, 0.98),
+          rationale: `LLM planner selected ${plan.length} tool step(s) from the perceived CSV schema. ${llmPlan.rationale || decision.rationale}`
+        };
+        llm.used = true;
+      } catch (error) {
+        llm.error = error.message;
+        decision = {
+          ...decision,
+          rationale: `${decision.rationale} LLM planner was unavailable, so the deterministic planner was used.`
+        };
+      }
+    }
 
     const state = {
       createdAt: new Date().toISOString(),
@@ -69,13 +95,14 @@ const agent = {
       safety,
       decision,
       plan,
+      llm,
       executionLog: [],
       findings: [],
       charts: {}
     };
 
     this.current = state;
-    this.remember(`Loaded ${perception.rowCount} rows and chose ${plan.length} analysis steps`);
+    this.remember(`Loaded ${perception.rowCount} rows and chose ${plan.length} analysis steps${llm.used ? " with LLM" : ""}`);
     render(state, this.memory);
 
     if (safety.blocked) {
@@ -83,7 +110,7 @@ const agent = {
       return;
     }
 
-    this.executePlan();
+    await this.executePlan(input.llm);
   },
 
   perceive(parsed) {
@@ -206,7 +233,7 @@ const agent = {
     return steps;
   },
 
-  executePlan() {
+  async executePlan(llmConfig) {
     if (!this.current) {
       return;
     }
@@ -226,6 +253,28 @@ const agent = {
       this.current.findings.push(...result.findings);
     });
 
+    if (this.current.llm.used && llmConfig?.apiKey) {
+      elements.status.textContent = "Asking LLM for summary";
+      try {
+        const llmFindings = await requestLlmSummary(this.current, llmConfig);
+        if (llmFindings.length) {
+          this.current.findings = llmFindings;
+          this.current.executionLog.push({
+            tool: "llm_summary",
+            step: "Generate LLM narrative summary",
+            summary: "LLM rewrote the computed results into final findings."
+          });
+        }
+      } catch (error) {
+        this.current.llm.error = error.message;
+        this.current.executionLog.push({
+          tool: "llm_summary",
+          step: "Generate LLM narrative summary",
+          summary: `LLM summary failed, deterministic findings kept: ${error.message}`
+        });
+      }
+    }
+
     this.remember(`Executed ${this.current.plan.length} tools and generated ${this.current.findings.length} findings`);
     elements.status.textContent = "Complete";
     render(this.current, this.memory);
@@ -241,10 +290,15 @@ const agent = {
   },
 
   reset() {
+    const llmConfig = readLlmConfig();
     this.current = null;
     this.memory = [];
     saveMemory(this.memory);
     elements.form.reset();
+    elements.useLlm.checked = llmConfig.enabled;
+    elements.llmUrl.value = llmConfig.url;
+    elements.llmModel.value = llmConfig.model;
+    elements.llmKey.value = llmConfig.apiKey;
     clearCanvas(elements.barChart, "Main plot will appear here");
     clearCanvas(elements.scatterChart, "Relationship plot will appear here");
     render(null, this.memory);
@@ -371,7 +425,12 @@ function render(state, memory) {
     `Missing cells: ${state.perception.missingCells}`
   ];
   elements.factsList.replaceChildren(...facts.map((fact) => li(fact)));
-  elements.decisionText.textContent = `${state.decision.strategy}. ${state.decision.rationale}`;
+  const llmNote = state.llm?.used
+    ? " LLM mode: used for planning and final narrative."
+    : state.llm?.enabled
+      ? ` LLM mode: fallback used${state.llm.error ? ` (${state.llm.error})` : ""}.`
+      : " LLM mode: off.";
+  elements.decisionText.textContent = `${state.decision.strategy}. ${state.decision.rationale}${llmNote}`;
   elements.confidenceBadge.textContent = `${Math.round(state.decision.confidence * 100)}% confidence`;
 
   elements.planList.replaceChildren(...state.plan.map((step, index) => {
@@ -716,6 +775,151 @@ function formatCompact(value) {
   return Number(value).toLocaleString(undefined, { notation: "compact", maximumFractionDigits: 1 });
 }
 
+async function requestLlmPlan(perception, question, config) {
+  const allowedTools = ["inspect_schema", "numeric_profile", "group_compare", "relationship_plot", "summarize_findings"];
+  const schema = {
+    rows: perception.rowCount,
+    columns: perception.columns.map((column) => ({
+      name: column.name,
+      type: column.type,
+      uniqueCount: column.uniqueCount,
+      missing: column.missing
+    })),
+    likelyMetric: perception.likelyMetric?.name || null,
+    likelyDimension: perception.likelyDimension?.name || null
+  };
+  const messages = [
+    {
+      role: "system",
+      content: [
+        "You are the planning brain of a CSV data analysis agent.",
+        "Choose a short executable analysis plan using only the allowed tool names.",
+        "Return strict JSON only, with keys: strategy, rationale, confidence, steps.",
+        "Each step must have title, detail, and tool.",
+        `Allowed tools: ${allowedTools.join(", ")}.`
+      ].join(" ")
+    },
+    {
+      role: "user",
+      content: JSON.stringify({ question, dataset: schema }, null, 2)
+    }
+  ];
+  const text = await callChatCompletion(config, messages, 0.2);
+  return parseLlmJson(text);
+}
+
+async function requestLlmSummary(state, config) {
+  const messages = [
+    {
+      role: "system",
+      content: "You summarize CSV analysis results for a user. Return strict JSON only: {\"findings\":[\"...\"]}. Keep findings concrete and based only on provided computed results."
+    },
+    {
+      role: "user",
+      content: JSON.stringify({
+        question: state.question,
+        schema: state.perception.columns.map((column) => ({ name: column.name, type: column.type })),
+        executionLog: state.executionLog,
+        deterministicFindings: state.findings,
+        charts: state.charts
+      }, null, 2)
+    }
+  ];
+  const text = await callChatCompletion(config, messages, 0.3);
+  const data = parseLlmJson(text);
+  return Array.isArray(data.findings) ? data.findings.slice(0, 8).map(String) : [];
+}
+
+async function callChatCompletion(config, messages, temperature) {
+  const urls = chatCompletionCandidates(config.url);
+  let lastError = "";
+
+  for (const url of urls) {
+    try {
+      const response = await fetch(url, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${config.apiKey}`
+        },
+        body: JSON.stringify({
+          model: config.model,
+          messages,
+          temperature
+        })
+      });
+
+      if (!response.ok) {
+        const errorText = await response.text();
+        lastError = `${response.status} ${errorText.slice(0, 160)}`;
+        continue;
+      }
+
+      const data = await response.json();
+      const content = data.choices?.[0]?.message?.content || data.output_text || data.content;
+      if (!content) {
+        throw new Error("LLM response did not contain message content");
+      }
+      return content;
+    } catch (error) {
+      lastError = error.message;
+    }
+  }
+
+  throw new Error(lastError || "LLM request failed");
+}
+
+function chatCompletionCandidates(rawUrl) {
+  const clean = rawUrl.replace(/\/+$/, "");
+  if (clean.endsWith("/chat/completions")) {
+    return [clean];
+  }
+  if (clean.endsWith("/v1")) {
+    return [`${clean}/chat/completions`, clean];
+  }
+  return [`${clean}/v1/chat/completions`, `${clean}/chat/completions`, clean];
+}
+
+function parseLlmJson(text) {
+  const trimmed = text.trim().replace(/^```json\s*/i, "").replace(/^```\s*/i, "").replace(/```$/i, "").trim();
+  try {
+    return JSON.parse(trimmed);
+  } catch {
+    const match = trimmed.match(/\{[\s\S]*\}/);
+    if (match) {
+      return JSON.parse(match[0]);
+    }
+    throw new Error("LLM returned non-JSON content");
+  }
+}
+
+function normalizeLlmSteps(steps, fallback) {
+  const allowed = new Set(["inspect_schema", "numeric_profile", "group_compare", "relationship_plot", "summarize_findings"]);
+  const clean = Array.isArray(steps)
+    ? steps
+        .filter((step) => allowed.has(step.tool))
+        .map((step) => ({
+          title: String(step.title || step.tool).slice(0, 90),
+          detail: String(step.detail || "Run this selected analysis tool.").slice(0, 180),
+          tool: step.tool
+        }))
+    : [];
+
+  if (!clean.length) {
+    return fallback;
+  }
+
+  if (!clean.some((step) => step.tool === "summarize_findings")) {
+    clean.push(fallback.find((step) => step.tool === "summarize_findings"));
+  }
+
+  return clean.filter(Boolean);
+}
+
+function clamp(value, min, max) {
+  return Math.min(max, Math.max(min, value));
+}
+
 function li(text) {
   const item = document.createElement("li");
   item.textContent = text;
@@ -735,16 +939,57 @@ function saveMemory(memory) {
 }
 
 function readInput() {
+  const llm = readLlmConfig();
+  saveLlmConfig(llm);
   return {
     csv: elements.csvText.value.trim(),
-    question: elements.question.value.trim() || "Summarize this CSV and identify useful findings."
+    question: elements.question.value.trim() || "Summarize this CSV and identify useful findings.",
+    llm
   };
 }
 
-elements.form.addEventListener("submit", (event) => {
+function readLlmConfig() {
+  return {
+    enabled: Boolean(elements.useLlm.checked),
+    url: elements.llmUrl.value.trim(),
+    model: elements.llmModel.value.trim() || "gpt-4o-mini",
+    apiKey: elements.llmKey.value.trim()
+  };
+}
+
+function saveLlmConfig(config) {
+  localStorage.setItem(llmStorageKey, JSON.stringify({
+    enabled: config.enabled,
+    url: config.url,
+    model: config.model,
+    apiKey: config.apiKey
+  }));
+}
+
+function hydrateLlmConfig() {
+  try {
+    const saved = JSON.parse(localStorage.getItem(llmStorageKey) || "{}");
+    if (typeof saved.enabled === "boolean") {
+      elements.useLlm.checked = saved.enabled;
+    }
+    if (saved.url) {
+      elements.llmUrl.value = saved.url;
+    }
+    if (saved.model) {
+      elements.llmModel.value = saved.model;
+    }
+    if (saved.apiKey) {
+      elements.llmKey.value = saved.apiKey;
+    }
+  } catch {
+    // Ignore invalid saved config and keep defaults.
+  }
+}
+
+elements.form.addEventListener("submit", async (event) => {
   event.preventDefault();
   try {
-    agent.run(readInput());
+    await agent.run(readInput());
   } catch (error) {
     elements.status.textContent = "Error";
     elements.decisionText.textContent = error.message;
@@ -763,7 +1008,10 @@ elements.csvFile.addEventListener("change", async (event) => {
 elements.sampleButton.addEventListener("click", () => {
   elements.csvText.value = sampleCsv;
   elements.question.value = "Compare restaurant bills and tips by day, identify relationships, and summarize useful findings.";
-  agent.run(readInput());
+  agent.run(readInput()).catch((error) => {
+    elements.status.textContent = "Error";
+    elements.decisionText.textContent = error.message;
+  });
 });
 
 elements.resetButton.addEventListener("click", () => agent.reset());
@@ -785,6 +1033,7 @@ elements.exportButton.addEventListener("click", () => {
   URL.revokeObjectURL(url);
 });
 
+hydrateLlmConfig();
 clearCanvas(elements.barChart, "Main plot will appear here");
 clearCanvas(elements.scatterChart, "Relationship plot will appear here");
 render(null, agent.memory);

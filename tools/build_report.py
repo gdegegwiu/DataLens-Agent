@@ -112,7 +112,7 @@ def draw_architecture(c: canvas.Canvas, x: float, y: float, w: float, h: float) 
         "CSV Input": (x + 22, y + 93),
         "Perception": (x + 153, y + 152),
         "Safety Gate": (x + 292, y + 152),
-        "Step Selector": (x + 153, y + 34),
+        "LLM Planner": (x + 153, y + 34),
         "Tool Layer": (x + 292, y + 34),
         "Outputs": (x + 428, y + 93),
     }
@@ -120,7 +120,7 @@ def draw_architecture(c: canvas.Canvas, x: float, y: float, w: float, h: float) 
         "CSV Input": colors.HexColor("#eaf1ff"),
         "Perception": colors.white,
         "Safety Gate": colors.HexColor("#fff0ee"),
-        "Step Selector": colors.HexColor("#fff5e6"),
+        "LLM Planner": colors.HexColor("#fff5e6"),
         "Tool Layer": colors.HexColor("#edf8f3"),
         "Outputs": colors.HexColor("#eaf1ff"),
     }
@@ -128,7 +128,7 @@ def draw_architecture(c: canvas.Canvas, x: float, y: float, w: float, h: float) 
         "CSV Input": BLUE,
         "Perception": LINE,
         "Safety Gate": RED,
-        "Step Selector": AMBER,
+        "LLM Planner": AMBER,
         "Tool Layer": GREEN,
         "Outputs": BLUE,
     }
@@ -136,7 +136,7 @@ def draw_architecture(c: canvas.Canvas, x: float, y: float, w: float, h: float) 
         "CSV Input": "upload, paste\nor sample",
         "Perception": "parse CSV\ninfer types",
         "Safety Gate": "check sensitive\ndata requests",
-        "Step Selector": "choose stats,\nplots, summary",
+        "LLM Planner": "choose stats,\nplots, summary",
         "Tool Layer": "aggregate, stats\ncorrelation",
         "Outputs": "plots, findings\nJSON export",
     }
@@ -163,13 +163,13 @@ def draw_architecture(c: canvas.Canvas, x: float, y: float, w: float, h: float) 
     draw_arrow(c, mid_right("CSV Input"), mid_left("Perception"))
     draw_arrow(c, mid_right("Perception"), mid_left("Safety Gate"))
     draw_arrow(c, mid_bottom("Safety Gate"), mid_top("Tool Layer"))
-    draw_arrow(c, mid_right("Step Selector"), mid_left("Tool Layer"))
+    draw_arrow(c, mid_right("LLM Planner"), mid_left("Tool Layer"))
     draw_arrow(c, mid_right("Tool Layer"), mid_left("Outputs"))
-    draw_arrow(c, mid_bottom("CSV Input"), mid_left("Step Selector"), GREEN)
+    draw_arrow(c, mid_bottom("CSV Input"), mid_left("LLM Planner"), GREEN)
 
     c.setFillColor(MUTED)
     c.setFont("Helvetica", 7.3)
-    c.drawCentredString(x + w / 2, y + 13, "Memory stores dataset facts, selected tools, plots, and findings.")
+    c.drawCentredString(x + w / 2, y + 13, "LLM planning is optional; local tools execute the selected analysis.")
 
 
 def prepare_report_images() -> dict[str, Path]:
@@ -216,7 +216,7 @@ def page_one(c: canvas.Canvas) -> None:
         "DataLens follows a perceive-decide-act agent loop. The user provides a CSV and an analysis goal. "
         "The perception module parses the CSV, infers numeric, categorical, and date columns, and checks missing values. "
         "The safety gate blocks requests that appear to involve secrets or sensitive identifiers. "
-        "The decision module selects suitable analysis steps from the dataset shape. "
+        "The optional LLM planner selects suitable analysis steps from the dataset shape and user goal; if it is unavailable, deterministic rules select the same local tools. "
         "The tool layer executes schema inspection, numeric profiling, category aggregation, relationship plotting, and summary generation."
     )
     y = draw_paragraph(c, text, MARGIN, y, PAGE_W - 2 * MARGIN)
@@ -225,9 +225,9 @@ def page_one(c: canvas.Canvas) -> None:
     y -= 28
     bullets = [
         "<b>Perception:</b> parses CSV rows and infers column types.",
-        "<b>Decision making:</b> chooses analysis steps from available data types and user goal.",
-        "<b>Action:</b> executes analysis tools and draws charts on canvas.",
-        "<b>Memory:</b> records loaded datasets and executed tool runs in localStorage.",
+        "<b>Decision making:</b> optionally uses an LLM planner, with deterministic fallback, to choose analysis steps.",
+        "<b>Action:</b> executes local analysis tools, draws charts on canvas, and can use the LLM to rewrite the final summary.",
+        "<b>Memory:</b> records loaded datasets, LLM/fallback status, and executed tool runs in localStorage.",
         "<b>Safety:</b> refuses analysis requests involving secrets or sensitive identifiers.",
     ]
     for bullet in bullets:

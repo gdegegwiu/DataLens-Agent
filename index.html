@@ -39,6 +39,24 @@
           <label for="csvText">CSV preview or pasted CSV</label>
           <textarea id="csvText" rows="10" required placeholder="Paste CSV data here, or click + to load the sample dataset."></textarea>
 
+          <section class="llm-box" aria-label="LLM configuration">
+            <label class="check-row" for="useLlm">
+              <input id="useLlm" type="checkbox" />
+              Use LLM planner and summary
+            </label>
+
+            <label for="llmUrl">LLM API URL</label>
+            <input id="llmUrl" type="url" value="https://sorryios.ai/codex" />
+
+            <label for="llmModel">Model</label>
+            <input id="llmModel" type="text" value="gpt-4o-mini" />
+
+            <label for="llmKey">API key</label>
+            <input id="llmKey" type="password" placeholder="Paste your API key here. It is stored only in this browser." autocomplete="off" />
+
+            <p class="hint">The key is never committed to the project. If the LLM call fails, the agent falls back to deterministic analysis tools.</p>
+          </section>
+
           <div class="button-row">
             <button class="primary" type="submit">Run analysis agent</button>
             <button class="secondary" id="resetButton" type="button">Reset</button>
