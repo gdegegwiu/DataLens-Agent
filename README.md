@@ -27,6 +27,8 @@ No installation is required.
 5. Review the perceived dataset, chosen analysis steps, execution log, plots, and summary findings.
 6. Click `Export analysis JSON` if you want to download the agent run state.
 
+Extra comparison datasets are in [data](data): `iris.csv` and `tips.csv` can be uploaded through the file picker to show how the agent adapts to different CSV structures.
+
 ## Agent capabilities
 
 - Perception: parses CSV, counts rows and columns, infers numeric, categorical, and date fields, and detects missing cells.
