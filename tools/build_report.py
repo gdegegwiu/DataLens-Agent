@@ -175,9 +175,9 @@ def draw_architecture(c: canvas.Canvas, x: float, y: float, w: float, h: float) 
 def prepare_report_images() -> dict[str, Path]:
     source = SCREENSHOT_DIR / "01-datalens-analysis.png"
     crops = {
-        "workspace": (380, 185, 1045, 1240),
-        "charts": (1060, 190, 1415, 1210),
-        "summary": (400, 1980, 1045, 3070),
+        "workspace": (310, 185, 1105, 930),
+        "charts": (320, 520, 1095, 1470),
+        "summary": (320, 2700, 1100, 3430),
     }
     output = {}
     with Image.open(source) as image:
@@ -237,13 +237,13 @@ def page_one(c: canvas.Canvas) -> None:
 def page_two(c: canvas.Canvas, images: dict[str, Path]) -> None:
     draw_title(c, "Screenshots and System Behavior", "Evidence of CSV perception, step choice, plotting, execution, and summary", 2)
     y = PAGE_H - 1.25 * inch
-    y = draw_paragraph(c, "The screenshots below show the DataLens agent running a small public tips CSV sample. The agent combines detected fields with selected analysis options, then executes each step.", MARGIN, y, PAGE_W - 2 * MARGIN)
+    y = draw_paragraph(c, "The screenshots below show the DataLens agent running a small public tips CSV sample. The central workspace gives generated plots more room, adds chart-specific analysis, and ends with an overall summary.", MARGIN, y, PAGE_W - 2 * MARGIN)
 
     top_y = y - 220
     image_in_frame(c, images["workspace"], MARGIN, top_y, 250, 200)
     image_in_frame(c, images["charts"], MARGIN + 270, top_y, 240, 200)
-    draw_paragraph(c, "<b>1. Perception and decisions:</b> the agent detects 24 rows with numeric and categorical fields, then chooses analysis steps.", MARGIN, top_y - 12, 250, "small")
-    draw_paragraph(c, "<b>2. Plot actions:</b> the agent creates a category comparison bar chart and a relationship scatter plot with correlation.", MARGIN + 270, top_y - 12, 240, "small")
+    draw_paragraph(c, "<b>1. Perception and decisions:</b> the agent detects 24 rows, infers field types, and keeps the charts in the main workspace.", MARGIN, top_y - 12, 250, "small")
+    draw_paragraph(c, "<b>2. Plot actions:</b> each chart includes a short analysis paragraph explaining the visible result.", MARGIN + 270, top_y - 12, 240, "small")
 
     lower_y = top_y - 250
     image_in_frame(c, images["summary"], MARGIN, lower_y, 260, 200)
@@ -254,13 +254,13 @@ def page_two(c: canvas.Canvas, images: dict[str, Path]) -> None:
         "<b>Input:</b> user uploads, pastes, or loads a sample CSV.",
         "<b>Perception:</b> CSV parser builds records and infers data types.",
         "<b>Decision:</b> the agent uses checked options and detected fields to choose profiling, aggregation, plotting, quality, custom, and summary steps.",
-        "<b>Execution:</b> each selected tool runs and writes to the execution log.",
-        "<b>Output:</b> charts, findings, memory, and JSON export make the result reproducible.",
+        "<b>Execution:</b> each selected tool runs and writes to the right-side execution log.",
+        "<b>Output:</b> large charts, chart notes, overall findings, memory, and JSON export make the result reproducible.",
     ]
     for step in steps:
         detail_y = draw_paragraph(c, f"- {step}", detail_x, detail_y, PAGE_W - MARGIN - detail_x)
 
-    draw_paragraph(c, "<b>3. Summary:</b> findings explain top categories, numeric profiles, correlation, and recommended business action.", MARGIN, lower_y - 12, 260, "small")
+    draw_paragraph(c, "<b>3. Overall summary:</b> the final section combines schema, profile, plot, quality, custom, and action findings.", MARGIN, lower_y - 12, 260, "small")
 
 
 def main() -> None:

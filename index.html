@@ -76,8 +76,8 @@
         <section class="panel output-panel" aria-label="Agent output" data-i18n-aria-label="aria.agentOutput">
           <div class="panel-heading">
             <div>
-              <p class="eyebrow" data-i18n="section.reasoning">Reasoning and action</p>
-              <h2 data-i18n="heading.workspace">Agent workspace</h2>
+              <p class="eyebrow" data-i18n="section.actions">Actions</p>
+              <h2 data-i18n="heading.plotWorkspace">Plots and findings</h2>
             </div>
             <button class="secondary compact" id="exportButton" type="button" data-i18n="button.export">Export analysis JSON</button>
           </div>
@@ -92,6 +92,20 @@
             <article class="surface">
               <h3 data-i18n="heading.decision">Decision</h3>
               <p id="decisionText">The agent is waiting for a dataset.</p>
+            </article>
+          </div>
+
+          <div class="chart-grid">
+            <article class="surface chart-card">
+              <h3 data-i18n="heading.mainPlot">Main plot</h3>
+              <canvas id="barChart" width="900" height="460" aria-label="Main generated chart" data-i18n-aria-label="aria.mainChart"></canvas>
+              <p id="barInsight" class="chart-insight" data-i18n="insight.main.empty">Run the agent to see the main chart analysis.</p>
+            </article>
+
+            <article class="surface chart-card">
+              <h3 data-i18n="heading.relationshipPlot">Relationship plot</h3>
+              <canvas id="scatterChart" width="900" height="420" aria-label="Relationship chart" data-i18n-aria-label="aria.relationshipChart"></canvas>
+              <p id="scatterInsight" class="chart-insight" data-i18n="insight.relationship.empty">Run the agent to see the relationship analysis.</p>
             </article>
           </div>
 
@@ -144,38 +158,26 @@
             </ol>
           </article>
 
-          <div class="execution-grid">
-            <article class="surface">
-              <h3 data-i18n="heading.execution">Execution log</h3>
-              <ol id="executionLog" class="execution-list">
-                <li data-i18n="empty.execution">No analysis tool has run yet.</li>
-              </ol>
-            </article>
-            <article class="surface">
-              <h3 data-i18n="heading.summary">Summary</h3>
-              <ul id="summaryList" class="summary-list">
-                <li data-i18n="empty.findings">No findings yet.</li>
-              </ul>
-            </article>
-          </div>
+          <article class="surface total-summary">
+            <h3 data-i18n="heading.overallSummary">Overall summary</h3>
+            <ul id="summaryList" class="summary-list">
+              <li data-i18n="empty.findings">No findings yet.</li>
+            </ul>
+          </article>
         </section>
 
-        <aside class="panel chart-panel" aria-label="Charts and memory" data-i18n-aria-label="aria.chartsMemory">
+        <aside class="panel side-panel" aria-label="Execution log and memory" data-i18n-aria-label="aria.executionMemory">
           <div class="panel-heading">
             <div>
-              <p class="eyebrow" data-i18n="section.actions">Actions</p>
-              <h2 data-i18n="heading.plotsMemory">Plots and memory</h2>
+              <p class="eyebrow" data-i18n="section.execution">Execution</p>
+              <h2 data-i18n="heading.execution">Execution log</h2>
             </div>
           </div>
 
           <article class="surface">
-            <h3 data-i18n="heading.mainPlot">Main plot</h3>
-            <canvas id="barChart" width="520" height="320" aria-label="Main generated chart" data-i18n-aria-label="aria.mainChart"></canvas>
-          </article>
-
-          <article class="surface">
-            <h3 data-i18n="heading.relationshipPlot">Relationship plot</h3>
-            <canvas id="scatterChart" width="520" height="260" aria-label="Relationship chart" data-i18n-aria-label="aria.relationshipChart"></canvas>
+            <ol id="executionLog" class="execution-list">
+              <li data-i18n="empty.execution">No analysis tool has run yet.</li>
+            </ol>
           </article>
 
           <article class="surface safety">

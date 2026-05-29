@@ -428,6 +428,10 @@ const translations = {
 
 Object.assign(translations.en, {
   "aria.stepOptions": "Analysis step options",
+  "aria.executionMemory": "Execution log and memory",
+  "section.execution": "Execution",
+  "heading.plotWorkspace": "Plots and findings",
+  "heading.overallSummary": "Overall summary",
   "option.inspect": "Schema and quality",
   "option.numeric": "Numeric profile",
   "option.group": "Group comparison",
@@ -462,11 +466,27 @@ Object.assign(translations.en, {
   "tool.group.unavailable": "Group comparison skipped because a categorical dimension and numeric metric were not both available.",
   "finding.groupUnavailable": "Group comparison needs at least one categorical column and one numeric column.",
   "tool.relationship.unavailable": "Relationship plot skipped because fewer than two numeric columns were available.",
-  "finding.relationshipUnavailable": "Relationship plotting needs at least two numeric columns."
+  "finding.relationshipUnavailable": "Relationship plotting needs at least two numeric columns.",
+  "insight.main.empty": "Run the agent to see the main chart analysis.",
+  "insight.relationship.empty": "Run the agent to see the relationship analysis.",
+  "insight.main": "Main plot analysis: {top} has the highest total {metric} ({topValue}), while {bottom} is lowest ({bottomValue}).",
+  "insight.main.unavailable": "Main plot analysis: no category comparison chart was generated for the selected steps.",
+  "insight.relationship": "Relationship analysis: {x} and {y} show a {strength} {direction} correlation (r = {r}).",
+  "insight.relationship.unavailable": "Relationship analysis: no scatter plot was generated because two numeric fields were not available or not selected.",
+  "correlation.strong": "strong",
+  "correlation.moderate": "moderate",
+  "correlation.weak": "weak",
+  "correlation.positive": "positive",
+  "correlation.negative": "negative",
+  "correlation.flat": "near-zero"
 });
 
 Object.assign(translations.zh, {
   "aria.stepOptions": "分析步骤选项",
+  "aria.executionMemory": "执行日志和记忆",
+  "section.execution": "执行",
+  "heading.plotWorkspace": "图表和发现",
+  "heading.overallSummary": "总总结",
   "option.inspect": "结构和质量",
   "option.numeric": "数值概况",
   "option.group": "分组对比",
@@ -501,11 +521,27 @@ Object.assign(translations.zh, {
   "tool.group.unavailable": "已跳过分组对比，因为没有同时检测到分类维度和数值指标。",
   "finding.groupUnavailable": "分组对比至少需要一个分类列和一个数值列。",
   "tool.relationship.unavailable": "已跳过关系图，因为可用数值列少于两个。",
-  "finding.relationshipUnavailable": "关系图至少需要两个数值列。"
+  "finding.relationshipUnavailable": "关系图至少需要两个数值列。",
+  "insight.main.empty": "运行代理后会显示主图分析。",
+  "insight.relationship.empty": "运行代理后会显示关系图分析。",
+  "insight.main": "主图分析：{top} 的 {metric} 总量最高（{topValue}），{bottom} 最低（{bottomValue}）。",
+  "insight.main.unavailable": "主图分析：当前选择的步骤没有生成分类对比图。",
+  "insight.relationship": "关系图分析：{x} 和 {y} 呈现{strength}的{direction}相关（r = {r}）。",
+  "insight.relationship.unavailable": "关系图分析：没有生成散点图，因为缺少两个数值字段或没有选择该步骤。",
+  "correlation.strong": "强",
+  "correlation.moderate": "中等",
+  "correlation.weak": "弱",
+  "correlation.positive": "正",
+  "correlation.negative": "负",
+  "correlation.flat": "接近零"
 });
 
 Object.assign(translations.mi, {
   "aria.stepOptions": "Kōwhiringa hipanga tātari",
+  "aria.executionMemory": "Rangitaki whakahaere me te maumahara",
+  "section.execution": "Whakahaere",
+  "heading.plotWorkspace": "Tūtohi me ngā kitenga",
+  "heading.overallSummary": "Whakarāpopoto whānui",
   "option.inspect": "Hanganga me te kounga",
   "option.numeric": "Arotake tau",
   "option.group": "Whakataurite rōpū",
@@ -540,7 +576,19 @@ Object.assign(translations.mi, {
   "tool.group.unavailable": "I whakakorea te whakataurite rōpū nā te kore kāwai me te ine tau e rua.",
   "finding.groupUnavailable": "Me whai te whakataurite rōpū i tētahi tīwae kāwai me tētahi tīwae tau.",
   "tool.relationship.unavailable": "I whakakorea te tūtohi hononga nā te iti iho i te rua ngā tīwae tau.",
-  "finding.relationshipUnavailable": "Me whai te tūtohi hononga i ngā tīwae tau e rua neke atu."
+  "finding.relationshipUnavailable": "Me whai te tūtohi hononga i ngā tīwae tau e rua neke atu.",
+  "insight.main.empty": "Whakahaerehia te kaiāwhina kia kite i te tātari tūtohi matua.",
+  "insight.relationship.empty": "Whakahaerehia te kaiāwhina kia kite i te tātari hononga.",
+  "insight.main": "Tātari tūtohi matua: ko {top} te tapeke {metric} teitei rawa ({topValue}), ā, ko {bottom} te iti rawa ({bottomValue}).",
+  "insight.main.unavailable": "Tātari tūtohi matua: kāore he tūtohi whakataurite kāwai i hangaia mō ngā hipanga kua tīpakohia.",
+  "insight.relationship": "Tātari hononga: he hononga {strength} {direction} tō {x} me {y} (r = {r}).",
+  "insight.relationship.unavailable": "Tātari hononga: kāore he tūtohi marara i hangaia nā te kore o ngā āpure tau e rua, nā te kore tīpako rānei.",
+  "correlation.strong": "kaha",
+  "correlation.moderate": "āhua kaha",
+  "correlation.weak": "ngoikore",
+  "correlation.positive": "pai",
+  "correlation.negative": "kino",
+  "correlation.flat": "tata kore"
 });
 
 if (!translations[currentLanguage]) {
@@ -572,7 +620,9 @@ const elements = {
   resetButton: document.querySelector("#resetButton"),
   exportButton: document.querySelector("#exportButton"),
   barChart: document.querySelector("#barChart"),
-  scatterChart: document.querySelector("#scatterChart")
+  scatterChart: document.querySelector("#scatterChart"),
+  barInsight: document.querySelector("#barInsight"),
+  scatterInsight: document.querySelector("#scatterInsight")
 };
 
 function t(key, params = {}) {
@@ -1166,6 +1216,7 @@ function render(state, memory) {
     elements.safetyText.textContent = t("safety.ok");
     elements.safetyBox.classList.remove("warning");
     elements.safetyBox.classList.add("safe");
+    renderChartInsights(null);
     return;
   }
 
@@ -1217,6 +1268,7 @@ function render(state, memory) {
 
   renderExecution(state.executionLog);
   renderFindings(state.findings);
+  renderChartInsights(state);
 }
 
 function renderExecution(entries) {
@@ -1245,6 +1297,42 @@ function renderFindings(findings) {
   }
 
   elements.summaryList.replaceChildren(...findings.map((finding) => li(finding)));
+}
+
+function renderChartInsights(state) {
+  if (!state) {
+    elements.barInsight.textContent = t("insight.main.empty");
+    elements.scatterInsight.textContent = t("insight.relationship.empty");
+    return;
+  }
+
+  const grouped = state.charts.grouped?.grouped || [];
+  if (grouped.length) {
+    const top = grouped[0];
+    const bottom = grouped[grouped.length - 1];
+    elements.barInsight.textContent = t("insight.main", {
+      top: top.label,
+      bottom: bottom.label,
+      metric: state.charts.grouped.metric,
+      topValue: formatNumber(top.value),
+      bottomValue: formatNumber(bottom.value)
+    });
+  } else {
+    elements.barInsight.textContent = t("insight.main.unavailable");
+  }
+
+  if (state.charts.relationship) {
+    const r = state.charts.relationship.correlation;
+    elements.scatterInsight.textContent = t("insight.relationship", {
+      x: state.charts.relationship.x,
+      y: state.charts.relationship.y,
+      r: formatNumber(r),
+      strength: correlationStrengthLabel(r),
+      direction: correlationDirectionLabel(r)
+    });
+  } else {
+    elements.scatterInsight.textContent = t("insight.relationship.unavailable");
+  }
 }
 
 function renderMemory(memory) {
@@ -1436,6 +1524,24 @@ function correlation(xs, ys) {
 
   const denominator = Math.sqrt(xVariance * yVariance);
   return denominator ? numerator / denominator : 0;
+}
+
+function correlationStrengthLabel(value) {
+  const absolute = Math.abs(value);
+  if (absolute >= 0.7) {
+    return t("correlation.strong");
+  }
+  if (absolute >= 0.35) {
+    return t("correlation.moderate");
+  }
+  return t("correlation.weak");
+}
+
+function correlationDirectionLabel(value) {
+  if (Math.abs(value) < 0.05) {
+    return t("correlation.flat");
+  }
+  return value >= 0 ? t("correlation.positive") : t("correlation.negative");
 }
 
 function drawBarChart(canvas, data, title, metricName) {

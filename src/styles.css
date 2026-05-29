@@ -41,7 +41,7 @@ button {
 }
 
 .app-shell {
-  width: min(1440px, 100%);
+  width: min(1680px, 100%);
   margin: 0 auto;
   padding: 24px;
 }
@@ -145,7 +145,7 @@ h3 {
 
 .workspace {
   display: grid;
-  grid-template-columns: minmax(280px, 0.9fr) minmax(420px, 1.7fr) minmax(280px, 0.9fr);
+  grid-template-columns: minmax(240px, 0.75fr) minmax(680px, 2.1fr) minmax(260px, 0.8fr);
   gap: 18px;
   align-items: start;
 }
@@ -161,8 +161,14 @@ h3 {
 .input-panel,
 .output-panel,
 .memory-panel,
-.chart-panel {
+.side-panel {
   padding: 18px;
+}
+
+.output-panel,
+.side-panel {
+  display: grid;
+  gap: 12px;
 }
 
 .panel-heading {
@@ -311,9 +317,8 @@ select:focus {
   gap: 12px;
 }
 
-.execution-grid {
+.chart-grid {
   display: grid;
-  grid-template-columns: 1fr 1fr;
   gap: 12px;
   margin-top: 12px;
 }
@@ -330,6 +335,25 @@ select:focus {
 }
 
 .plan-surface {
+  margin-top: 12px;
+  padding: 16px;
+}
+
+.chart-card {
+  padding: 16px;
+}
+
+.chart-insight {
+  margin: 12px 0 0;
+  padding: 11px 12px;
+  border-left: 3px solid var(--blue);
+  border-radius: 0 6px 6px 0;
+  background: #ffffff;
+  color: var(--muted);
+  font-size: 0.92rem;
+}
+
+.total-summary {
   margin-top: 12px;
   padding: 16px;
 }
@@ -539,12 +563,17 @@ canvas {
   border-radius: 6px;
 }
 
-@media (max-width: 1120px) {
+@media (max-width: 1240px) {
   .workspace {
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: minmax(260px, 0.8fr) minmax(420px, 1.2fr);
   }
 
   .output-panel {
+    grid-column: 2;
+    order: 2;
+  }
+
+  .side-panel {
     grid-column: 1 / -1;
     order: 3;
   }
@@ -562,7 +591,7 @@ canvas {
   .topbar,
   .workspace,
   .loop-grid,
-  .execution-grid,
+  .chart-grid,
   .form-grid,
   .feedback-row,
   .button-row {
@@ -572,6 +601,12 @@ canvas {
 
   .workspace {
     display: grid;
+  }
+
+  .output-panel,
+  .side-panel {
+    grid-column: auto;
+    order: initial;
   }
 
   .agent-state {
