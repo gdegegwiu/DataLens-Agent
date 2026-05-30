@@ -41,7 +41,7 @@ Extra comparison datasets are in [data](data): `iris.csv` and the full `tips.csv
 
 ## Optional LLM mode
 
-The agent can run without an LLM, but it also supports an OpenAI-compatible chat-completions API. Most API relay services do not allow direct browser CORS requests, so LLM mode should be run through `DataLensAgent.exe` or the included local proxy server.
+The agent can run without an LLM, but it also supports an LLM planner through `DataLensAgent.exe` or the included local proxy server. The proxy adapts the browser request to the configured relay, including the `https://sorryios.ai/codex` Responses API path.
 
 1. Start the local server:
 
@@ -52,11 +52,11 @@ The agent can run without an LLM, but it also supports an OpenAI-compatible chat
 2. Open `http://127.0.0.1:8787/index.html`.
 3. Tick `Use LLM planner and summary`.
 4. Keep the API URL as `/api/llm`.
-5. Enter the model name, such as `gpt-4o-mini`.
+5. Enter the model name. For the Sorryios Codex relay, start with `gpt-5-codex` or the model name shown by that service.
 6. Paste the API key in the browser field.
 7. Run the analysis.
 
-The proxy forwards `/api/llm` to `https://sorryios.ai/codex` by default. To use a different relay target, set `DATALENS_LLM_URL` before starting the server. The API key is not stored in this repository. It is saved only in the current browser's `localStorage` for convenience. If the LLM request fails, the app continues with the deterministic local analysis tools.
+The proxy forwards `/api/llm` to `https://sorryios.ai/codex` by default. To use a different relay target, set `DATALENS_LLM_URL` before starting the server. The API key is not stored in this repository. It is saved only in the current browser's `localStorage` for convenience. If the relay reports `model_not_found`, the key or account package does not currently have a channel for the selected model; choose a supported model or update the relay account. If the LLM request fails, the app continues with the deterministic local analysis tools.
 
 ## Agent capabilities
 

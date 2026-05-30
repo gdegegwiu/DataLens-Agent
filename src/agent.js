@@ -2,7 +2,9 @@ const storageKey = "datalens.memory.v1";
 const llmStorageKey = "datalens.llm.config.v1";
 const languageStorageKey = "datalens.language.v1";
 const defaultLlmUrl = "/api/llm";
+const defaultLlmModel = "gpt-5-codex";
 const oldDirectLlmUrl = "https://sorryios.ai/codex";
+const oldDefaultLlmModel = "gpt-4o-mini";
 
 const sampleCsv = `total_bill,tip,sex,smoker,day,time,size
 16.99,1.01,Female,No,Sun,Dinner,2
@@ -2293,7 +2295,7 @@ function readLlmConfig() {
   return {
     enabled: Boolean(elements.useLlm.checked),
     url: elements.llmUrl.value.trim() || defaultLlmUrl,
-    model: elements.llmModel.value.trim() || "gpt-4o-mini",
+    model: elements.llmModel.value.trim() || defaultLlmModel,
     apiKey: elements.llmKey.value.trim()
   };
 }
@@ -2318,8 +2320,10 @@ function hydrateLlmConfig() {
     } else {
       elements.llmUrl.value = defaultLlmUrl;
     }
-    if (saved.model) {
+    if (saved.model && saved.model !== oldDefaultLlmModel) {
       elements.llmModel.value = saved.model;
+    } else {
+      elements.llmModel.value = defaultLlmModel;
     }
     if (saved.apiKey) {
       elements.llmKey.value = saved.apiKey;
