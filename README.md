@@ -107,7 +107,3 @@ The API key is not stored in this repository. It is saved only in the current br
     |-- build_report.py
     `-- llm_proxy_server.py
 ```
-
-## Commit checkpoint guide
-
-The local repository contains checkpoint-style commits showing design evolution and improvements. The final commit switches the project to the DataLens CSV analysis agent.
