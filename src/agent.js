@@ -3,7 +3,6 @@ const llmStorageKey = "datalens.llm.config.v1";
 const languageStorageKey = "datalens.language.v1";
 const defaultLlmUrl = "/api/llm";
 const defaultLlmModel = "qwen-plus";
-const oldDirectLlmUrl = "https://sorryios.ai/codex";
 const oldDefaultLlmModels = new Set(["gpt-4o-mini", "gpt-5-codex"]);
 
 const sampleCsv = `total_bill,tip,sex,smoker,day,time,size
@@ -57,6 +56,10 @@ const translations = {
     "heading.csvInput": "CSV input",
     "button.sample": "Load sample CSV",
     "label.uploadCsv": "Upload CSV",
+    "aria.dropCsv": "Drop a CSV file here or click to choose one",
+    "upload.dropTitle": "Drop CSV here or click to choose",
+    "upload.dropMeta": "Supports .csv files and pasted CSV text",
+    "upload.selected": "Selected file: {name}",
     "label.analysisGoal": "Analysis goal",
     "placeholder.question": "Example: Find which region and channel perform best, identify trends, and summarize useful business actions.",
     "label.csvText": "CSV preview or pasted CSV",
@@ -67,7 +70,7 @@ const translations = {
     "label.model": "Model",
     "label.apiKey": "API key",
     "placeholder.apiKey": "Paste your API key here. It is stored only in this browser.",
-    "hint.llm": "For LLM mode, run tools/llm_proxy_server.py and keep /api/llm here. The key is stored only in this browser. If the LLM call fails, the agent falls back to deterministic tools.",
+    "hint.llm": "LLM calls go through the local /api/llm proxy. The key is stored only in this browser. If the LLM call fails, the agent falls back to deterministic tools.",
     "button.run": "Run analysis agent",
     "button.reset": "Reset",
     "aria.agentOutput": "Agent output",
@@ -114,6 +117,7 @@ const translations = {
     "decision.defaultQuestion": "Summarize the dataset and identify useful findings.",
     "decision.llmRationale": "LLM planner selected {count} tool step(s) from the perceived CSV schema. {rationale}",
     "decision.llmFallback": "{rationale} LLM planner was unavailable, so the deterministic planner was used.",
+    "decision.autoSelected": "Auto-decision selected {steps} executable step(s) and {charts} chart type(s).",
     "llm.used": " LLM mode: used for planning and final narrative.",
     "llm.fallback": " LLM mode: fallback used{error}.",
     "llm.off": " LLM mode: off.",
@@ -438,7 +442,7 @@ Object.assign(translations.en, {
   "section.execution": "Execution",
   "heading.plotWorkspace": "Plots and findings",
   "heading.overallSummary": "Overall summary",
-  "hint.llm": "For LLM mode, run tools/llm_proxy_server.py and keep /api/llm here. The key is stored only in this browser. If the LLM call fails, the agent falls back to deterministic tools.",
+  "hint.llm": "LLM calls go through the local /api/llm proxy. The key is stored only in this browser. If the LLM call fails, the agent falls back to deterministic tools.",
   "heading.barChart": "Bar chart",
   "heading.histogram": "Histogram",
   "heading.pieChart": "Pie chart",
@@ -454,8 +458,10 @@ Object.assign(translations.en, {
   "option.outlier": "Outlier scan",
   "option.trend": "Trend analysis",
   "option.summary": "Final summary",
-  "label.customStep": "Custom analysis instruction",
-  "label.chartTypes": "Chart types to draw",
+    "label.customStep": "Custom analysis instruction",
+    "label.autoDecision": "Agent auto-decision",
+    "hint.autoDecision": "Let the agent choose analysis steps and chart types from the CSV schema.",
+    "label.chartTypes": "Chart types to draw",
   "chart.bar": "Bar chart",
   "chart.scatter": "Scatter plot",
   "chart.histogram": "Histogram",
@@ -516,12 +522,16 @@ Object.assign(translations.en, {
 });
 
 Object.assign(translations.zh, {
+  "aria.dropCsv": "拖拽 CSV 文件到这里，或点击选择文件",
+  "upload.dropTitle": "拖拽 CSV 到这里，或点击选择",
+  "upload.dropMeta": "支持 .csv 文件，也可以直接粘贴 CSV 文本",
+  "upload.selected": "已选择文件：{name}",
   "aria.stepOptions": "分析步骤选项",
   "aria.executionMemory": "执行日志和记忆",
   "section.execution": "执行",
   "heading.plotWorkspace": "图表和发现",
   "heading.overallSummary": "总总结",
-  "hint.llm": "要使用 LLM，请先运行 tools/llm_proxy_server.py，并保持这里为 /api/llm。key 只保存在当前浏览器；如果 LLM 失败，agent 会回退到确定性工具。",
+  "hint.llm": "LLM 调用会通过本地 /api/llm 代理转发。key 只保存在当前浏览器；如果 LLM 失败，agent 会回退到确定性工具。",
   "heading.barChart": "柱状图",
   "heading.histogram": "直方图",
   "heading.pieChart": "饼图",
@@ -538,6 +548,9 @@ Object.assign(translations.zh, {
   "option.trend": "趋势分析",
   "option.summary": "最终总结",
   "label.customStep": "自定义分析说明",
+  "label.autoDecision": "代理全自动决策",
+  "hint.autoDecision": "让 agent 根据 CSV schema 自动选择分析步骤和图表类型。",
+  "decision.autoSelected": "全自动决策选择了 {steps} 个可执行步骤和 {charts} 种图表。",
   "label.chartTypes": "要绘制的图表类型",
   "chart.bar": "柱状图",
   "chart.scatter": "散点图",
@@ -599,12 +612,16 @@ Object.assign(translations.zh, {
 });
 
 Object.assign(translations.mi, {
+  "aria.dropCsv": "Takahia he CSV ki konei, pāwhiria rānei kia kōwhiri",
+  "upload.dropTitle": "Takahia CSV ki konei, pāwhiria rānei",
+  "upload.dropMeta": "Ka tautoko i ngā kōnae .csv me te kuputuhi CSV",
+  "upload.selected": "Kōnae kua kōwhiria: {name}",
   "aria.stepOptions": "Kōwhiringa hipanga tātari",
   "aria.executionMemory": "Rangitaki whakahaere me te maumahara",
   "section.execution": "Whakahaere",
   "heading.plotWorkspace": "Tūtohi me ngā kitenga",
   "heading.overallSummary": "Whakarāpopoto whānui",
-  "hint.llm": "Mō te aratau LLM, whakahaere tools/llm_proxy_server.py, ā, waiho /api/llm ki konei. Ka tiakina te kī ki tēnei pūtirotiro anake; ki te hinga te LLM, ka hoki ki ngā taputapu pūmau.",
+  "hint.llm": "Ka haere ngā tono LLM mā te takawaenga /api/llm. Ka tiakina te kī ki tēnei pūtirotiro anake; ki te hinga te LLM, ka hoki ki ngā taputapu pūmau.",
   "heading.barChart": "Tūtohi pae",
   "heading.histogram": "Tūtohi tohatoha",
   "heading.pieChart": "Tūtohi porowhita",
@@ -621,6 +638,9 @@ Object.assign(translations.mi, {
   "option.trend": "Tātari ia",
   "option.summary": "Whakarāpopoto whakamutunga",
   "label.customStep": "Tohutohu tātari ritenga",
+  "label.autoDecision": "Whakatau aunoa a te kaiāwhina",
+  "hint.autoDecision": "Tukua te kaiāwhina kia kōwhiri i ngā hipanga tātari me ngā momo tūtohi mai i te CSV schema.",
+  "decision.autoSelected": "I kōwhiri aunoa i ngā hipanga {steps} me ngā momo tūtohi {charts}.",
   "label.chartTypes": "Ngā momo tūtohi hei tuhi",
   "chart.bar": "Tūtohi pae",
   "chart.scatter": "Tūtohi marara",
@@ -689,9 +709,13 @@ const elements = {
   form: document.querySelector("#analysisForm"),
   languageSelect: document.querySelector("#languageSelect"),
   csvFile: document.querySelector("#csvFile"),
+  dropZone: document.querySelector("#dropZone"),
+  fileName: document.querySelector("#fileName"),
   csvText: document.querySelector("#csvText"),
   question: document.querySelector("#question"),
   customStep: document.querySelector("#customStep"),
+  autoDecision: document.querySelector("#autoDecision"),
+  stepControls: document.querySelector(".step-controls"),
   useLlm: document.querySelector("#useLlm"),
   llmUrl: document.querySelector("#llmUrl"),
   llmModel: document.querySelector("#llmModel"),
@@ -773,16 +797,24 @@ const agent = {
     const safety = this.checkSafety(input.question);
     const parsed = parseCsv(input.csv);
     const perception = this.perceive(parsed);
-    const chartTypes = normalizeSelectedChartTypes(input.chartTypes);
     let decision = this.decide(perception, input.question, safety);
-    let plan = this.chooseSteps(perception, safety, input.selectedSteps, input.customStep);
+    const chosenToolIds = input.autoDecision ? autoToolIds(perception) : input.selectedSteps;
+    const chartTypes = input.autoDecision ? autoChartTypes(perception) : normalizeSelectedChartTypes(input.chartTypes);
+    let plan = this.chooseSteps(perception, safety, chosenToolIds, input.customStep);
+    if (input.autoDecision && !safety.blocked) {
+      decision = {
+        ...decision,
+        rationale: `${decision.rationale} ${t("decision.autoSelected", { steps: plan.length, charts: chartTypes.length })}`
+      };
+    }
     const llm = { enabled: input.llm.enabled, used: false, error: "" };
 
     if (!safety.blocked && input.llm.enabled && input.llm.apiKey) {
       setStatus("status.askingLlm");
       try {
-        const llmPlan = await requestLlmPlan(perception, input.question, input.llm, input.selectedSteps, input.customStep);
-        plan = normalizeLlmSteps(llmPlan.steps, plan, input.selectedSteps, Boolean(input.customStep));
+        const llmAllowedToolIds = input.autoDecision ? selectableToolIds : input.selectedSteps;
+        const llmPlan = await requestLlmPlan(perception, input.question, input.llm, llmAllowedToolIds, input.customStep);
+        plan = normalizeLlmSteps(llmPlan.steps, plan, llmAllowedToolIds, Boolean(input.customStep));
         decision = {
           strategy: llmPlan.strategy || decision.strategy,
           confidence: clamp(Number(llmPlan.confidence) || decision.confidence, 0.5, 0.98),
@@ -809,6 +841,7 @@ const agent = {
       decision,
       plan,
       chartTypes,
+      autoDecision: input.autoDecision,
       llm,
       executionLog: [],
       findings: [],
@@ -993,9 +1026,11 @@ const agent = {
     saveMemory(this.memory);
     elements.form.reset();
     elements.useLlm.checked = llmConfig.enabled;
-    elements.llmUrl.value = llmConfig.url;
+    elements.llmUrl.value = defaultLlmUrl;
     elements.llmModel.value = llmConfig.model;
     elements.llmKey.value = llmConfig.apiKey;
+    elements.fileName.textContent = "";
+    syncDecisionMode();
     redrawCharts(null);
     render(null, this.memory);
   }
@@ -1010,6 +1045,32 @@ function normalizeSelectedToolIds(selectedSteps) {
   return selectableToolIds.filter((toolId) => selected.has(toolId));
 }
 
+function autoToolIds(perception) {
+  const ids = ["inspect_schema"];
+
+  if (perception.numeric.length) {
+    ids.push("numeric_profile");
+  }
+  if (perception.likelyMetric && perception.likelyDimension) {
+    ids.push("group_compare");
+  }
+  if (perception.numeric.length >= 2) {
+    ids.push("relationship_plot");
+  }
+  if (perception.missingCells > 0) {
+    ids.push("missing_quality");
+  }
+  if (perception.numeric.length && perception.rowCount >= 8) {
+    ids.push("outlier_scan");
+  }
+  if (perception.likelyDate && perception.likelyMetric) {
+    ids.push("trend_analysis");
+  }
+
+  ids.push("summarize_findings");
+  return selectableToolIds.filter((toolId) => ids.includes(toolId));
+}
+
 function allowedToolIds(selectedSteps, hasCustomStep) {
   const ids = normalizeSelectedToolIds(selectedSteps);
   if (hasCustomStep) {
@@ -1021,6 +1082,26 @@ function allowedToolIds(selectedSteps, hasCustomStep) {
 function normalizeSelectedChartTypes(chartTypes) {
   if (!Array.isArray(chartTypes)) {
     return [...defaultChartTypes];
+  }
+  return chartTypeIds.filter((chartType) => chartTypes.includes(chartType));
+}
+
+function autoChartTypes(perception) {
+  const chartTypes = [];
+  if (perception.likelyMetric && perception.likelyDimension) {
+    chartTypes.push("bar");
+    if (perception.likelyDimension.uniqueCount <= 8) {
+      chartTypes.push("pie");
+    }
+  }
+  if (perception.numeric.length >= 2) {
+    chartTypes.push("scatter");
+  }
+  if (perception.numeric.length) {
+    chartTypes.push("histogram");
+  }
+  if (perception.likelyDate && perception.likelyMetric) {
+    chartTypes.push("line");
   }
   return chartTypeIds.filter((chartType) => chartTypes.includes(chartType));
 }
@@ -1373,7 +1454,7 @@ function redrawCharts(state) {
 }
 
 function setVisibleChartCards(chartTypes) {
-  const visible = new Set(chartTypes?.length ? chartTypes : defaultChartTypes);
+  const visible = new Set(Array.isArray(chartTypes) ? chartTypes : defaultChartTypes);
   chartTypeIds.forEach((chartType) => {
     elements.chartCards[chartType].hidden = !visible.has(chartType);
   });
@@ -2284,6 +2365,7 @@ function readInput() {
   return {
     csv: elements.csvText.value.trim(),
     question: elements.question.value.trim() || t("fallback.question"),
+    autoDecision: Boolean(elements.autoDecision.checked),
     selectedSteps: [...document.querySelectorAll('input[name="analysisStep"]:checked')].map((input) => input.value),
     chartTypes: [...document.querySelectorAll('input[name="chartType"]:checked')].map((input) => input.value),
     customStep: elements.customStep.value.trim(),
@@ -2294,7 +2376,7 @@ function readInput() {
 function readLlmConfig() {
   return {
     enabled: Boolean(elements.useLlm.checked),
-    url: elements.llmUrl.value.trim() || defaultLlmUrl,
+    url: defaultLlmUrl,
     model: elements.llmModel.value.trim() || defaultLlmModel,
     apiKey: elements.llmKey.value.trim()
   };
@@ -2315,11 +2397,7 @@ function hydrateLlmConfig() {
     if (typeof saved.enabled === "boolean") {
       elements.useLlm.checked = saved.enabled;
     }
-    if (saved.url && saved.url !== oldDirectLlmUrl) {
-      elements.llmUrl.value = saved.url;
-    } else {
-      elements.llmUrl.value = defaultLlmUrl;
-    }
+    elements.llmUrl.value = defaultLlmUrl;
     if (saved.model && !oldDefaultLlmModels.has(saved.model)) {
       elements.llmModel.value = saved.model;
     } else {
@@ -2339,6 +2417,8 @@ elements.languageSelect.addEventListener("change", () => {
   applyLanguage();
 });
 
+elements.autoDecision.addEventListener("change", syncDecisionMode);
+
 elements.form.addEventListener("submit", async (event) => {
   event.preventDefault();
   try {
@@ -2351,15 +2431,35 @@ elements.form.addEventListener("submit", async (event) => {
 
 elements.csvFile.addEventListener("change", async (event) => {
   const file = event.target.files[0];
-  if (!file) {
-    return;
+  await loadCsvFile(file);
+});
+
+elements.dropZone.addEventListener("dragover", (event) => {
+  event.preventDefault();
+  elements.dropZone.classList.add("drag-over");
+});
+
+elements.dropZone.addEventListener("dragleave", () => {
+  elements.dropZone.classList.remove("drag-over");
+});
+
+elements.dropZone.addEventListener("drop", async (event) => {
+  event.preventDefault();
+  elements.dropZone.classList.remove("drag-over");
+  const file = event.dataTransfer.files[0];
+  await loadCsvFile(file);
+});
+
+elements.dropZone.addEventListener("keydown", (event) => {
+  if (event.key === "Enter" || event.key === " ") {
+    event.preventDefault();
+    elements.csvFile.click();
   }
-  elements.csvText.value = await file.text();
-  elements.question.value ||= t("upload.question");
 });
 
 elements.sampleButton.addEventListener("click", () => {
   elements.csvText.value = sampleCsv;
+  elements.fileName.textContent = "";
   elements.question.value = t("sample.question");
   agent.run(readInput()).catch((error) => {
     setStatus("status.error");
@@ -2387,4 +2487,22 @@ elements.exportButton.addEventListener("click", () => {
 });
 
 hydrateLlmConfig();
+syncDecisionMode();
 applyLanguage();
+
+async function loadCsvFile(file) {
+  if (!file) {
+    return;
+  }
+  elements.csvText.value = await file.text();
+  elements.question.value ||= t("upload.question");
+  elements.fileName.textContent = t("upload.selected", { name: file.name });
+}
+
+function syncDecisionMode() {
+  const auto = Boolean(elements.autoDecision.checked);
+  elements.stepControls.classList.toggle("auto-locked", auto);
+  document.querySelectorAll('input[name="analysisStep"], input[name="chartType"]').forEach((input) => {
+    input.disabled = auto;
+  });
+}
