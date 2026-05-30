@@ -4,7 +4,7 @@ Use this script when recording the demo video for GitHub.
 
 ## 0:00-0:20 - Introduce the prototype
 
-Open `index.html` and say:
+Open `index.html` for deterministic mode, or run `python tools\llm_proxy_server.py` and open `http://127.0.0.1:8787/index.html` for LLM mode. Say:
 
 "This is DataLens, a CSV data analysis agent. It reads a dataset, decides which analysis steps are useful, executes those steps, creates plots, and summarizes findings."
 
@@ -22,7 +22,7 @@ Point to the chosen analysis steps and execution log. Explain:
 
 - The agent chose schema inspection, numeric profiling, category comparison, relationship plotting, and summary generation.
 - These are selected automatically from the detected column types.
-- If LLM mode is enabled, the model chooses the analysis plan and writes the final summary; if it is disabled or unavailable, the deterministic fallback still works.
+- If LLM mode is enabled through the local proxy, the model chooses the analysis plan and writes the final summary; if it is disabled or unavailable, the deterministic fallback still works.
 
 ## 1:15-1:40 - Show plots
 

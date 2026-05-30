@@ -18,7 +18,7 @@ A short demo script is included at [demo/demo_script.md](demo/demo_script.md).
 
 ## How to run
 
-No installation is required.
+No installation is required for deterministic local analysis.
 
 1. Download or clone this repository.
 2. Open [index.html](index.html) in a modern browser.
@@ -33,15 +33,22 @@ Extra comparison datasets are in [data](data): `iris.csv` and the full `tips.csv
 
 ## Optional LLM mode
 
-The agent can run without an LLM, but it also supports an OpenAI-compatible chat-completions API.
+The agent can run without an LLM, but it also supports an OpenAI-compatible chat-completions API. Most API relay services do not allow direct browser CORS requests, so LLM mode should be run through the included local proxy server.
 
-1. Tick `Use LLM planner and summary`.
-2. Keep the default API URL `https://sorryios.ai/codex`, or enter another compatible endpoint.
-3. Enter the model name, such as `gpt-4o-mini`.
-4. Paste the API key in the browser field.
-5. Run the analysis.
+1. Start the local server:
 
-The API key is not stored in this repository. It is saved only in the current browser's `localStorage` for convenience. If the LLM request fails, the app continues with the deterministic local analysis tools.
+   ```powershell
+   python tools\llm_proxy_server.py
+   ```
+
+2. Open `http://127.0.0.1:8787/index.html`.
+3. Tick `Use LLM planner and summary`.
+4. Keep the API URL as `/api/llm`.
+5. Enter the model name, such as `gpt-4o-mini`.
+6. Paste the API key in the browser field.
+7. Run the analysis.
+
+The proxy forwards `/api/llm` to `https://sorryios.ai/codex` by default. To use a different relay target, set `DATALENS_LLM_URL` before starting the server. The API key is not stored in this repository. It is saved only in the current browser's `localStorage` for convenience. If the LLM request fails, the app continues with the deterministic local analysis tools.
 
 ## Agent capabilities
 
@@ -71,7 +78,8 @@ The API key is not stored in this repository. It is saved only in the current br
 |-- demo/
 |   `-- demo_script.md
 `-- tools/
-    `-- build_report.py
+    |-- build_report.py
+    `-- llm_proxy_server.py
 ```
 
 ## Commit checkpoint guide

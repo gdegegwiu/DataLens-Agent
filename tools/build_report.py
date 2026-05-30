@@ -169,7 +169,7 @@ def draw_architecture(c: canvas.Canvas, x: float, y: float, w: float, h: float) 
 
     c.setFillColor(MUTED)
     c.setFont("Helvetica", 7.3)
-    c.drawCentredString(x + w / 2, y + 13, "LLM planning is optional; local tools execute the selected analysis.")
+    c.drawCentredString(x + w / 2, y + 13, "LLM planning is optional; a local proxy avoids browser CORS limits.")
 
 
 def prepare_report_images() -> dict[str, Path]:
@@ -216,7 +216,7 @@ def page_one(c: canvas.Canvas) -> None:
         "DataLens follows a perceive-decide-act agent loop. The user provides a CSV and an analysis goal. "
         "The perception module parses the CSV, infers numeric, categorical, and date columns, and checks missing values. "
         "The safety gate blocks requests that appear to involve secrets or sensitive identifiers. "
-        "The optional LLM planner selects suitable analysis steps from the dataset shape, user goal, and checked options; if it is unavailable, deterministic rules select local tools. "
+        "The optional LLM planner selects suitable analysis steps from the dataset shape, user goal, and checked options through a small local proxy; if it is unavailable, deterministic rules select local tools. "
         "The tool layer executes schema inspection, numeric profiling, category aggregation, relationship plotting, missing-value checks, outlier scans, trend checks, custom notes, and summary generation."
     )
     y = draw_paragraph(c, text, MARGIN, y, PAGE_W - 2 * MARGIN)
