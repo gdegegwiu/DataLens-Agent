@@ -419,6 +419,18 @@ select:focus {
   gap: 8px 12px;
 }
 
+.chart-choice-block {
+  margin-top: 12px;
+  padding-top: 12px;
+  border-top: 1px solid #dce4f0;
+}
+
+.chart-type-grid {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(110px, 1fr));
+  gap: 8px 12px;
+}
+
 .step-option {
   align-items: flex-start;
   margin: 0;
@@ -581,6 +593,10 @@ canvas {
   .step-option-grid {
     grid-template-columns: repeat(2, minmax(140px, 1fr));
   }
+
+  .chart-type-grid {
+    grid-template-columns: repeat(3, minmax(120px, 1fr));
+  }
 }
 
 @media (max-width: 760px) {
@@ -630,6 +646,10 @@ canvas {
   }
 
   .step-option-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .chart-type-grid {
     grid-template-columns: 1fr;
   }
 

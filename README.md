@@ -24,7 +24,7 @@ No installation is required.
 2. Open [index.html](index.html) in a modern browser.
 3. Use the language selector to switch between English, Chinese, and Māori.
 4. Click the `+` button to load a small public `tips.csv` sample, or upload your own `.csv` file.
-5. In `Chosen analysis steps`, tick any extra steps you want, such as missing values, outliers, or trends. You can also type a custom analysis instruction.
+5. In `Chosen analysis steps`, tick any extra steps you want, such as missing values, outliers, or trends. You can also choose chart types, including bar, scatter, histogram, pie, and line charts, or type a custom analysis instruction.
 6. Click `Run analysis agent`.
 7. Review the perceived dataset, chosen analysis steps, execution log, plots, and summary findings.
 8. Click `Export analysis JSON` if you want to download the agent run state.
@@ -48,7 +48,7 @@ The API key is not stored in this repository. It is saved only in the current br
 - Perception: parses CSV, counts rows and columns, infers numeric, categorical, and date fields, and detects missing cells.
 - Decision making: uses the optional LLM planner when configured; otherwise chooses analysis steps with deterministic rules based on detected column types and the user's analysis goal.
 - Tool execution: runs selected schema inspection, numeric profiling, group comparison, relationship plotting, missing-value checks, outlier scans, trend analysis, custom notes, and summary generation.
-- Action: creates a bar chart, scatter plot, execution log, LLM or deterministic natural-language findings, and JSON export.
+- Action: creates selected chart types, chart-specific notes, execution log, LLM or deterministic natural-language findings, and JSON export.
 - Memory: stores recent analysis events in `localStorage`.
 - Safety: refuses requests that appear to involve secrets or sensitive identifiers.
 - Multilingual UI: supports English, Chinese, and Māori language switching for the web interface and deterministic agent output.

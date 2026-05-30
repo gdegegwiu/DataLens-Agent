@@ -175,9 +175,9 @@ def draw_architecture(c: canvas.Canvas, x: float, y: float, w: float, h: float) 
 def prepare_report_images() -> dict[str, Path]:
     source = SCREENSHOT_DIR / "01-datalens-analysis.png"
     crops = {
-        "workspace": (310, 185, 1105, 1760),
-        "charts": (320, 1760, 1095, 2860),
-        "summary": (320, 2860, 1100, 3430),
+        "workspace": (310, 185, 1105, 1800),
+        "charts": (320, 2700, 1095, 4100),
+        "summary": (320, 4100, 1100, 4900),
     }
     output = {}
     with Image.open(source) as image:
@@ -226,7 +226,7 @@ def page_one(c: canvas.Canvas) -> None:
     bullets = [
         "<b>Perception:</b> parses CSV rows and infers column types.",
         "<b>Decision making:</b> optionally uses an LLM planner, with deterministic fallback, to choose or refine selected analysis steps.",
-        "<b>Action:</b> executes local analysis tools, draws charts on canvas, handles optional custom instructions, and can use the LLM to rewrite the final summary.",
+        "<b>Action:</b> executes local analysis tools, draws selected chart types on canvas, handles optional custom instructions, and can use the LLM to rewrite the final summary.",
         "<b>Memory:</b> records loaded datasets, LLM/fallback status, and executed tool runs in localStorage.",
         "<b>Safety:</b> refuses analysis requests involving secrets or sensitive identifiers.",
     ]
@@ -237,13 +237,13 @@ def page_one(c: canvas.Canvas) -> None:
 def page_two(c: canvas.Canvas, images: dict[str, Path]) -> None:
     draw_title(c, "Screenshots and System Behavior", "Evidence of CSV perception, step choice, plotting, execution, and summary", 2)
     y = PAGE_H - 1.25 * inch
-    y = draw_paragraph(c, "The screenshots below show the DataLens agent running a small public tips CSV sample. The central workspace gives generated plots more room, adds chart-specific analysis, and ends with an overall summary.", MARGIN, y, PAGE_W - 2 * MARGIN)
+    y = draw_paragraph(c, "The screenshots below show the DataLens agent running a small public tips CSV sample. The central workspace lets users choose chart types, gives generated plots more room, adds chart-specific analysis, and ends with an overall summary.", MARGIN, y, PAGE_W - 2 * MARGIN)
 
     top_y = y - 220
     image_in_frame(c, images["workspace"], MARGIN, top_y, 250, 200)
     image_in_frame(c, images["charts"], MARGIN + 270, top_y, 240, 200)
     draw_paragraph(c, "<b>1. Perception and decisions:</b> the agent detects 24 rows, infers field types, and keeps the charts in the main workspace.", MARGIN, top_y - 12, 250, "small")
-    draw_paragraph(c, "<b>2. Plot actions:</b> each chart includes a short analysis paragraph explaining the visible result.", MARGIN + 270, top_y - 12, 240, "small")
+    draw_paragraph(c, "<b>2. Plot actions:</b> selected bar, scatter, histogram, pie, and line chart slots include short analysis paragraphs.", MARGIN + 270, top_y - 12, 240, "small")
 
     lower_y = top_y - 250
     image_in_frame(c, images["summary"], MARGIN, lower_y, 260, 200)

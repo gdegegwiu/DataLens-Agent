@@ -136,6 +136,32 @@
                 </label>
               </div>
 
+              <div class="chart-choice-block">
+                <label class="step-custom-label" data-i18n="label.chartTypes">Chart types to draw</label>
+                <div class="chart-type-grid">
+                  <label class="check-row step-option" for="chartBar">
+                    <input id="chartBar" name="chartType" type="checkbox" value="bar" checked />
+                    <span data-i18n="chart.bar">Bar chart</span>
+                  </label>
+                  <label class="check-row step-option" for="chartScatter">
+                    <input id="chartScatter" name="chartType" type="checkbox" value="scatter" checked />
+                    <span data-i18n="chart.scatter">Scatter plot</span>
+                  </label>
+                  <label class="check-row step-option" for="chartHistogram">
+                    <input id="chartHistogram" name="chartType" type="checkbox" value="histogram" />
+                    <span data-i18n="chart.histogram">Histogram</span>
+                  </label>
+                  <label class="check-row step-option" for="chartPie">
+                    <input id="chartPie" name="chartType" type="checkbox" value="pie" />
+                    <span data-i18n="chart.pie">Pie chart</span>
+                  </label>
+                  <label class="check-row step-option" for="chartLine">
+                    <input id="chartLine" name="chartType" type="checkbox" value="line" />
+                    <span data-i18n="chart.line">Line chart</span>
+                  </label>
+                </div>
+              </div>
+
               <label class="step-custom-label" for="customStep" data-i18n="label.customStep">Custom analysis instruction</label>
               <textarea id="customStep" rows="2" placeholder="Optional: ask the agent to check one extra pattern." data-i18n-placeholder="placeholder.customStep"></textarea>
             </section>
@@ -145,16 +171,34 @@
           </article>
 
           <div class="chart-grid">
-            <article class="surface chart-card">
-              <h3 data-i18n="heading.mainPlot">Main plot</h3>
+            <article id="barCard" class="surface chart-card">
+              <h3 data-i18n="heading.barChart">Bar chart</h3>
               <canvas id="barChart" width="900" height="460" aria-label="Main generated chart" data-i18n-aria-label="aria.mainChart"></canvas>
               <p id="barInsight" class="chart-insight" data-i18n="insight.main.empty">Run the agent to see the main chart analysis.</p>
             </article>
 
-            <article class="surface chart-card">
+            <article id="scatterCard" class="surface chart-card">
               <h3 data-i18n="heading.relationshipPlot">Relationship plot</h3>
               <canvas id="scatterChart" width="900" height="420" aria-label="Relationship chart" data-i18n-aria-label="aria.relationshipChart"></canvas>
               <p id="scatterInsight" class="chart-insight" data-i18n="insight.relationship.empty">Run the agent to see the relationship analysis.</p>
+            </article>
+
+            <article id="histogramCard" class="surface chart-card" hidden>
+              <h3 data-i18n="heading.histogram">Histogram</h3>
+              <canvas id="histogramChart" width="900" height="420" aria-label="Histogram chart" data-i18n-aria-label="aria.histogramChart"></canvas>
+              <p id="histogramInsight" class="chart-insight" data-i18n="insight.histogram.empty">Select histogram and run the agent to see distribution analysis.</p>
+            </article>
+
+            <article id="pieCard" class="surface chart-card" hidden>
+              <h3 data-i18n="heading.pieChart">Pie chart</h3>
+              <canvas id="pieChart" width="900" height="420" aria-label="Pie chart" data-i18n-aria-label="aria.pieChart"></canvas>
+              <p id="pieInsight" class="chart-insight" data-i18n="insight.pie.empty">Select pie chart and run the agent to see share analysis.</p>
+            </article>
+
+            <article id="lineCard" class="surface chart-card" hidden>
+              <h3 data-i18n="heading.lineChart">Line chart</h3>
+              <canvas id="lineChart" width="900" height="420" aria-label="Line chart" data-i18n-aria-label="aria.lineChart"></canvas>
+              <p id="lineInsight" class="chart-insight" data-i18n="insight.line.empty">Select line chart and run the agent to see trend analysis.</p>
             </article>
           </div>
 

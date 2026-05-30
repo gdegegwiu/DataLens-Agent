@@ -39,6 +39,8 @@ const selectableToolIds = [
   "summarize_findings"
 ];
 const fallbackToolIds = ["inspect_schema", "numeric_profile", "summarize_findings"];
+const chartTypeIds = ["bar", "scatter", "histogram", "pie", "line"];
+const defaultChartTypes = ["bar", "scatter"];
 
 let currentLanguage = localStorage.getItem(languageStorageKey) || "en";
 
@@ -432,6 +434,13 @@ Object.assign(translations.en, {
   "section.execution": "Execution",
   "heading.plotWorkspace": "Plots and findings",
   "heading.overallSummary": "Overall summary",
+  "heading.barChart": "Bar chart",
+  "heading.histogram": "Histogram",
+  "heading.pieChart": "Pie chart",
+  "heading.lineChart": "Line chart",
+  "aria.histogramChart": "Histogram chart",
+  "aria.pieChart": "Pie chart",
+  "aria.lineChart": "Line chart",
   "option.inspect": "Schema and quality",
   "option.numeric": "Numeric profile",
   "option.group": "Group comparison",
@@ -441,6 +450,17 @@ Object.assign(translations.en, {
   "option.trend": "Trend analysis",
   "option.summary": "Final summary",
   "label.customStep": "Custom analysis instruction",
+  "label.chartTypes": "Chart types to draw",
+  "chart.bar": "Bar chart",
+  "chart.scatter": "Scatter plot",
+  "chart.histogram": "Histogram",
+  "chart.pie": "Pie chart",
+  "chart.line": "Line chart",
+  "chart.histogramTitle": "{column} distribution",
+  "chart.trendTitle": "{metric} over {date}",
+  "canvas.histogram": "Histogram will appear here",
+  "canvas.pie": "Pie chart will appear here",
+  "canvas.line": "Line chart will appear here",
   "placeholder.customStep": "Optional: ask the agent to check one extra pattern.",
   "step.missing.title": "Check missing values by column",
   "step.missing.detail": "List columns with missing cells and estimate the cleaning risk.",
@@ -473,6 +493,15 @@ Object.assign(translations.en, {
   "insight.main.unavailable": "Main plot analysis: no category comparison chart was generated for the selected steps.",
   "insight.relationship": "Relationship analysis: {x} and {y} show a {strength} {direction} correlation (r = {r}).",
   "insight.relationship.unavailable": "Relationship analysis: no scatter plot was generated because two numeric fields were not available or not selected.",
+  "insight.histogram.empty": "Select histogram and run the agent to see distribution analysis.",
+  "insight.histogram": "Histogram analysis: {column} is concentrated in the {binLabel} range, with {count} row(s).",
+  "insight.histogram.unavailable": "Histogram analysis: no numeric column was available or histogram was not selected.",
+  "insight.pie.empty": "Select pie chart and run the agent to see share analysis.",
+  "insight.pie": "Pie chart analysis: {top} has the largest share of {metric}, with {percent}% of the plotted total.",
+  "insight.pie.unavailable": "Pie chart analysis: no category comparison was available or pie chart was not selected.",
+  "insight.line.empty": "Select line chart and run the agent to see trend analysis.",
+  "insight.line": "Line chart analysis: {metric} moves from {first} at {firstDate} to {last} at {lastDate}.",
+  "insight.line.unavailable": "Line chart analysis: a date column and numeric metric are needed for a line chart.",
   "correlation.strong": "strong",
   "correlation.moderate": "moderate",
   "correlation.weak": "weak",
@@ -487,6 +516,13 @@ Object.assign(translations.zh, {
   "section.execution": "执行",
   "heading.plotWorkspace": "图表和发现",
   "heading.overallSummary": "总总结",
+  "heading.barChart": "柱状图",
+  "heading.histogram": "直方图",
+  "heading.pieChart": "饼图",
+  "heading.lineChart": "折线图",
+  "aria.histogramChart": "直方图",
+  "aria.pieChart": "饼图",
+  "aria.lineChart": "折线图",
   "option.inspect": "结构和质量",
   "option.numeric": "数值概况",
   "option.group": "分组对比",
@@ -496,6 +532,17 @@ Object.assign(translations.zh, {
   "option.trend": "趋势分析",
   "option.summary": "最终总结",
   "label.customStep": "自定义分析说明",
+  "label.chartTypes": "要绘制的图表类型",
+  "chart.bar": "柱状图",
+  "chart.scatter": "散点图",
+  "chart.histogram": "直方图",
+  "chart.pie": "饼图",
+  "chart.line": "折线图",
+  "chart.histogramTitle": "{column} 分布",
+  "chart.trendTitle": "{metric} 随 {date} 变化",
+  "canvas.histogram": "直方图会显示在这里",
+  "canvas.pie": "饼图会显示在这里",
+  "canvas.line": "折线图会显示在这里",
   "placeholder.customStep": "可选：让代理额外检查一个模式。",
   "step.missing.title": "按列检查缺失值",
   "step.missing.detail": "列出有缺失单元格的列，并估计清理风险。",
@@ -528,6 +575,15 @@ Object.assign(translations.zh, {
   "insight.main.unavailable": "主图分析：当前选择的步骤没有生成分类对比图。",
   "insight.relationship": "关系图分析：{x} 和 {y} 呈现{strength}的{direction}相关（r = {r}）。",
   "insight.relationship.unavailable": "关系图分析：没有生成散点图，因为缺少两个数值字段或没有选择该步骤。",
+  "insight.histogram.empty": "选择直方图并运行代理后，会显示分布分析。",
+  "insight.histogram": "直方图分析：{column} 最集中在 {binLabel} 区间，共 {count} 行。",
+  "insight.histogram.unavailable": "直方图分析：没有可用数值列，或未选择直方图。",
+  "insight.pie.empty": "选择饼图并运行代理后，会显示占比分析。",
+  "insight.pie": "饼图分析：{top} 的 {metric} 占比最大，占已绘制总量的 {percent}%。",
+  "insight.pie.unavailable": "饼图分析：没有可用分类对比，或未选择饼图。",
+  "insight.line.empty": "选择折线图并运行代理后，会显示趋势分析。",
+  "insight.line": "折线图分析：{metric} 从 {firstDate} 的 {first} 变化到 {lastDate} 的 {last}。",
+  "insight.line.unavailable": "折线图分析：需要日期列和数值指标。",
   "correlation.strong": "强",
   "correlation.moderate": "中等",
   "correlation.weak": "弱",
@@ -542,6 +598,13 @@ Object.assign(translations.mi, {
   "section.execution": "Whakahaere",
   "heading.plotWorkspace": "Tūtohi me ngā kitenga",
   "heading.overallSummary": "Whakarāpopoto whānui",
+  "heading.barChart": "Tūtohi pae",
+  "heading.histogram": "Tūtohi tohatoha",
+  "heading.pieChart": "Tūtohi porowhita",
+  "heading.lineChart": "Tūtohi rārangi",
+  "aria.histogramChart": "Tūtohi tohatoha",
+  "aria.pieChart": "Tūtohi porowhita",
+  "aria.lineChart": "Tūtohi rārangi",
   "option.inspect": "Hanganga me te kounga",
   "option.numeric": "Arotake tau",
   "option.group": "Whakataurite rōpū",
@@ -551,6 +614,17 @@ Object.assign(translations.mi, {
   "option.trend": "Tātari ia",
   "option.summary": "Whakarāpopoto whakamutunga",
   "label.customStep": "Tohutohu tātari ritenga",
+  "label.chartTypes": "Ngā momo tūtohi hei tuhi",
+  "chart.bar": "Tūtohi pae",
+  "chart.scatter": "Tūtohi marara",
+  "chart.histogram": "Tūtohi tohatoha",
+  "chart.pie": "Tūtohi porowhita",
+  "chart.line": "Tūtohi rārangi",
+  "chart.histogramTitle": "Tohatoha {column}",
+  "chart.trendTitle": "{metric} mā {date}",
+  "canvas.histogram": "Ka puta te tūtohi tohatoha ki konei",
+  "canvas.pie": "Ka puta te tūtohi porowhita ki konei",
+  "canvas.line": "Ka puta te tūtohi rārangi ki konei",
   "placeholder.customStep": "Kōwhiri noa: tonoa te kaiāwhina kia tirohia tētahi tauira anō.",
   "step.missing.title": "Tirohia ngā uara ngaro mā ia tīwae",
   "step.missing.detail": "Whakarārangitia ngā tīwae whai pūtau ngaro, ā, aromātaihia te tūraru horoi.",
@@ -583,6 +657,15 @@ Object.assign(translations.mi, {
   "insight.main.unavailable": "Tātari tūtohi matua: kāore he tūtohi whakataurite kāwai i hangaia mō ngā hipanga kua tīpakohia.",
   "insight.relationship": "Tātari hononga: he hononga {strength} {direction} tō {x} me {y} (r = {r}).",
   "insight.relationship.unavailable": "Tātari hononga: kāore he tūtohi marara i hangaia nā te kore o ngā āpure tau e rua, nā te kore tīpako rānei.",
+  "insight.histogram.empty": "Tīpakohia te tūtohi tohatoha, kātahi whakahaerehia te kaiāwhina.",
+  "insight.histogram": "Tātari tohatoha: kei te awhe {binLabel} te nuinga o {column}, me ngā rārangi {count}.",
+  "insight.histogram.unavailable": "Tātari tohatoha: kāore he tīwae tau, kāore rānei te tūtohi i tīpakohia.",
+  "insight.pie.empty": "Tīpakohia te tūtohi porowhita, kātahi whakahaerehia te kaiāwhina.",
+  "insight.pie": "Tātari porowhita: ko {top} te wāhanga {metric} nui rawa, arā {percent}% o te tapeke kua tuhia.",
+  "insight.pie.unavailable": "Tātari porowhita: kāore he whakataurite kāwai, kāore rānei te tūtohi i tīpakohia.",
+  "insight.line.empty": "Tīpakohia te tūtohi rārangi, kātahi whakahaerehia te kaiāwhina.",
+  "insight.line": "Tātari rārangi: ka neke {metric} mai i {first} i {firstDate} ki {last} i {lastDate}.",
+  "insight.line.unavailable": "Tātari rārangi: me whai tīwae rā me te ine tau.",
   "correlation.strong": "kaha",
   "correlation.moderate": "āhua kaha",
   "correlation.weak": "ngoikore",
@@ -619,10 +702,23 @@ const elements = {
   sampleButton: document.querySelector("#sampleButton"),
   resetButton: document.querySelector("#resetButton"),
   exportButton: document.querySelector("#exportButton"),
+  chartCards: {
+    bar: document.querySelector("#barCard"),
+    scatter: document.querySelector("#scatterCard"),
+    histogram: document.querySelector("#histogramCard"),
+    pie: document.querySelector("#pieCard"),
+    line: document.querySelector("#lineCard")
+  },
   barChart: document.querySelector("#barChart"),
   scatterChart: document.querySelector("#scatterChart"),
+  histogramChart: document.querySelector("#histogramChart"),
+  pieChart: document.querySelector("#pieChart"),
+  lineChart: document.querySelector("#lineChart"),
   barInsight: document.querySelector("#barInsight"),
-  scatterInsight: document.querySelector("#scatterInsight")
+  scatterInsight: document.querySelector("#scatterInsight"),
+  histogramInsight: document.querySelector("#histogramInsight"),
+  pieInsight: document.querySelector("#pieInsight"),
+  lineInsight: document.querySelector("#lineInsight")
 };
 
 function t(key, params = {}) {
@@ -656,8 +752,7 @@ function applyLanguage() {
     redrawCharts(agent.current);
     setStatus(agent.current.safety.blocked ? "status.blocked" : "status.complete");
   } else {
-    clearCanvas(elements.barChart, t("canvas.main"));
-    clearCanvas(elements.scatterChart, t("canvas.relationship"));
+    redrawCharts(null);
     render(null, agent.memory);
   }
 }
@@ -671,6 +766,7 @@ const agent = {
     const safety = this.checkSafety(input.question);
     const parsed = parseCsv(input.csv);
     const perception = this.perceive(parsed);
+    const chartTypes = normalizeSelectedChartTypes(input.chartTypes);
     let decision = this.decide(perception, input.question, safety);
     let plan = this.chooseSteps(perception, safety, input.selectedSteps, input.customStep);
     const llm = { enabled: input.llm.enabled, used: false, error: "" };
@@ -705,6 +801,7 @@ const agent = {
       safety,
       decision,
       plan,
+      chartTypes,
       llm,
       executionLog: [],
       findings: [],
@@ -834,6 +931,7 @@ const agent = {
     this.current.executionLog = [];
     this.current.findings = [];
     this.current.charts = {};
+    redrawCharts(this.current);
 
     this.current.plan.forEach((step) => {
       const result = tools[step.tool](this.current);
@@ -891,8 +989,7 @@ const agent = {
     elements.llmUrl.value = llmConfig.url;
     elements.llmModel.value = llmConfig.model;
     elements.llmKey.value = llmConfig.apiKey;
-    clearCanvas(elements.barChart, t("canvas.main"));
-    clearCanvas(elements.scatterChart, t("canvas.relationship"));
+    redrawCharts(null);
     render(null, this.memory);
   }
 };
@@ -912,6 +1009,17 @@ function allowedToolIds(selectedSteps, hasCustomStep) {
     ids.push("custom_note");
   }
   return ids.length ? ids : fallbackToolIds;
+}
+
+function normalizeSelectedChartTypes(chartTypes) {
+  if (!Array.isArray(chartTypes)) {
+    return [...defaultChartTypes];
+  }
+  return chartTypeIds.filter((chartType) => chartTypes.includes(chartType));
+}
+
+function wantsChart(state, chartType) {
+  return state?.chartTypes?.includes(chartType);
 }
 
 function createPlanStep(toolId, perception, customStep = "") {
@@ -1003,6 +1111,14 @@ const tools = {
       return t("finding.numeric", { column: column.name, sum: formatNumber(stats.sum), mean: formatNumber(stats.mean), min: formatNumber(stats.min), max: formatNumber(stats.max) });
     });
 
+    const histogramColumn = state.perception.likelyMetric || state.perception.numeric[0];
+    if (wantsChart(state, "histogram") && histogramColumn) {
+      const values = getNumericValues(state.rows, histogramColumn.name);
+      const bins = buildHistogram(values);
+      state.charts.histogram = { column: histogramColumn.name, bins };
+      drawHistogramChart(elements.histogramChart, bins, t("chart.histogramTitle", { column: histogramColumn.name }), histogramColumn.name);
+    }
+
     return {
       summary: t("tool.numeric.summary", { count: state.perception.numeric.length }),
       findings: lines.length ? lines : [t("finding.noNumeric")]
@@ -1028,7 +1144,13 @@ const tools = {
     }
 
     state.charts.grouped = { dimension: dimension.name, metric: metric.name, grouped };
-    drawBarChart(elements.barChart, grouped, t("chart.by", { metric: metric.name, dimension: dimension.name }), metric.name);
+    if (wantsChart(state, "bar")) {
+      drawBarChart(elements.barChart, grouped, t("chart.by", { metric: metric.name, dimension: dimension.name }), metric.name);
+    }
+    if (wantsChart(state, "pie")) {
+      state.charts.pie = { dimension: dimension.name, metric: metric.name, grouped };
+      drawPieChart(elements.pieChart, grouped, t("chart.by", { metric: metric.name, dimension: dimension.name }), metric.name);
+    }
 
     const top = grouped[0];
     const bottom = grouped[grouped.length - 1];
@@ -1063,8 +1185,10 @@ const tools = {
     }
 
     const r = correlation(points.map((point) => point.x), points.map((point) => point.y));
-    state.charts.relationship = { x: xColumn.name, y: yColumn.name, correlation: r };
-    drawScatterChart(elements.scatterChart, points, xColumn.name, yColumn.name, r);
+    if (wantsChart(state, "scatter")) {
+      state.charts.relationship = { x: xColumn.name, y: yColumn.name, correlation: r };
+      drawScatterChart(elements.scatterChart, points, xColumn.name, yColumn.name, r);
+    }
 
     return {
       summary: t("tool.relationship.summary", { x: xColumn.name, y: yColumn.name }),
@@ -1130,6 +1254,11 @@ const tools = {
 
     const first = trend[0];
     const last = trend[trend.length - 1];
+    if (wantsChart(state, "line")) {
+      state.charts.line = { date: dateColumn.name, metric: metric.name, trend };
+      drawLineChart(elements.lineChart, trend, t("chart.trendTitle", { metric: metric.name, date: dateColumn.name }), metric.name);
+    }
+
     return {
       summary: t("tool.trend.summary", { metric: metric.name, date: dateColumn.name }),
       findings: [
@@ -1177,7 +1306,10 @@ const tools = {
 };
 
 function redrawCharts(state) {
-  if (state?.charts?.grouped) {
+  const visibleTypes = state ? state.chartTypes : defaultChartTypes;
+  setVisibleChartCards(visibleTypes);
+
+  if (state?.charts?.grouped && wantsChart(state, "bar")) {
     drawBarChart(
       elements.barChart,
       state.charts.grouped.grouped,
@@ -1188,7 +1320,7 @@ function redrawCharts(state) {
     clearCanvas(elements.barChart, t("canvas.main"));
   }
 
-  if (state?.charts?.relationship) {
+  if (state?.charts?.relationship && wantsChart(state, "scatter")) {
     const xName = state.charts.relationship.x;
     const yName = state.charts.relationship.y;
     const points = state.rows
@@ -1198,6 +1330,46 @@ function redrawCharts(state) {
   } else {
     clearCanvas(elements.scatterChart, t("canvas.relationship"));
   }
+
+  if (state?.charts?.histogram && wantsChart(state, "histogram")) {
+    drawHistogramChart(
+      elements.histogramChart,
+      state.charts.histogram.bins,
+      t("chart.histogramTitle", { column: state.charts.histogram.column }),
+      state.charts.histogram.column
+    );
+  } else {
+    clearCanvas(elements.histogramChart, t("canvas.histogram"));
+  }
+
+  if (state?.charts?.pie && wantsChart(state, "pie")) {
+    drawPieChart(
+      elements.pieChart,
+      state.charts.pie.grouped,
+      t("chart.by", { metric: state.charts.pie.metric, dimension: state.charts.pie.dimension }),
+      state.charts.pie.metric
+    );
+  } else {
+    clearCanvas(elements.pieChart, t("canvas.pie"));
+  }
+
+  if (state?.charts?.line && wantsChart(state, "line")) {
+    drawLineChart(
+      elements.lineChart,
+      state.charts.line.trend,
+      t("chart.trendTitle", { metric: state.charts.line.metric, date: state.charts.line.date }),
+      state.charts.line.metric
+    );
+  } else {
+    clearCanvas(elements.lineChart, t("canvas.line"));
+  }
+}
+
+function setVisibleChartCards(chartTypes) {
+  const visible = new Set(chartTypes?.length ? chartTypes : defaultChartTypes);
+  chartTypeIds.forEach((chartType) => {
+    elements.chartCards[chartType].hidden = !visible.has(chartType);
+  });
 }
 
 function render(state, memory) {
@@ -1301,13 +1473,18 @@ function renderFindings(findings) {
 
 function renderChartInsights(state) {
   if (!state) {
+    setVisibleChartCards(defaultChartTypes);
     elements.barInsight.textContent = t("insight.main.empty");
     elements.scatterInsight.textContent = t("insight.relationship.empty");
+    elements.histogramInsight.textContent = t("insight.histogram.empty");
+    elements.pieInsight.textContent = t("insight.pie.empty");
+    elements.lineInsight.textContent = t("insight.line.empty");
     return;
   }
 
+  setVisibleChartCards(state.chartTypes);
   const grouped = state.charts.grouped?.grouped || [];
-  if (grouped.length) {
+  if (grouped.length && wantsChart(state, "bar")) {
     const top = grouped[0];
     const bottom = grouped[grouped.length - 1];
     elements.barInsight.textContent = t("insight.main", {
@@ -1321,7 +1498,7 @@ function renderChartInsights(state) {
     elements.barInsight.textContent = t("insight.main.unavailable");
   }
 
-  if (state.charts.relationship) {
+  if (state.charts.relationship && wantsChart(state, "scatter")) {
     const r = state.charts.relationship.correlation;
     elements.scatterInsight.textContent = t("insight.relationship", {
       x: state.charts.relationship.x,
@@ -1332,6 +1509,43 @@ function renderChartInsights(state) {
     });
   } else {
     elements.scatterInsight.textContent = t("insight.relationship.unavailable");
+  }
+
+  if (state.charts.histogram?.bins?.length && wantsChart(state, "histogram")) {
+    const peak = state.charts.histogram.bins.reduce((best, bin) => (bin.count > best.count ? bin : best), state.charts.histogram.bins[0]);
+    elements.histogramInsight.textContent = t("insight.histogram", {
+      column: state.charts.histogram.column,
+      binLabel: peak.label,
+      count: peak.count
+    });
+  } else {
+    elements.histogramInsight.textContent = t("insight.histogram.unavailable");
+  }
+
+  if (state.charts.pie && wantsChart(state, "pie")) {
+    const total = state.charts.pie.grouped.reduce((sum, item) => sum + item.value, 0);
+    const top = state.charts.pie.grouped[0];
+    elements.pieInsight.textContent = t("insight.pie", {
+      top: top.label,
+      metric: state.charts.pie.metric,
+      percent: total ? formatNumber(top.value / total * 100) : 0
+    });
+  } else {
+    elements.pieInsight.textContent = t("insight.pie.unavailable");
+  }
+
+  if (state.charts.line && wantsChart(state, "line")) {
+    const first = state.charts.line.trend[0];
+    const last = state.charts.line.trend[state.charts.line.trend.length - 1];
+    elements.lineInsight.textContent = t("insight.line", {
+      metric: state.charts.line.metric,
+      first: formatNumber(first.value),
+      firstDate: first.label,
+      last: formatNumber(last.value),
+      lastDate: last.label
+    });
+  } else {
+    elements.lineInsight.textContent = t("insight.line.unavailable");
   }
 }
 
@@ -1502,6 +1716,37 @@ function aggregateByDate(rows, dateName, metricName) {
     .sort((a, b) => a.label.localeCompare(b.label));
 }
 
+function buildHistogram(values, binCount = 6) {
+  if (!values.length) {
+    return [];
+  }
+
+  const min = Math.min(...values);
+  const max = Math.max(...values);
+  if (min === max) {
+    return [{ label: formatNumber(min), min, max, count: values.length }];
+  }
+
+  const width = (max - min) / binCount;
+  const bins = Array.from({ length: binCount }, (_, index) => {
+    const start = min + width * index;
+    const end = index === binCount - 1 ? max : start + width;
+    return {
+      label: `${formatNumber(start)}-${formatNumber(end)}`,
+      min: start,
+      max: end,
+      count: 0
+    };
+  });
+
+  values.forEach((value) => {
+    const index = Math.min(Math.floor((value - min) / width), binCount - 1);
+    bins[index].count += 1;
+  });
+
+  return bins;
+}
+
 function correlation(xs, ys) {
   const n = Math.min(xs.length, ys.length);
   if (n < 2) {
@@ -1638,6 +1883,170 @@ function drawScatterChart(canvas, points, xName, yName, r) {
   ctx.rotate(-Math.PI / 2);
   ctx.fillText(yName, 0, 0);
   ctx.restore();
+}
+
+function drawHistogramChart(canvas, bins, title, columnName) {
+  const ctx = canvas.getContext("2d");
+  const width = canvas.width;
+  const height = canvas.height;
+  ctx.clearRect(0, 0, width, height);
+  drawCanvasBackground(ctx, width, height);
+
+  if (!bins.length) {
+    clearCanvas(canvas, t("canvas.histogram"));
+    return;
+  }
+
+  const margin = { top: 44, right: 24, bottom: 78, left: 64 };
+  const plotW = width - margin.left - margin.right;
+  const plotH = height - margin.top - margin.bottom;
+  const max = Math.max(...bins.map((bin) => bin.count), 1);
+  const barW = plotW / bins.length * 0.7;
+
+  ctx.fillStyle = "#172033";
+  ctx.font = "700 16px Segoe UI, Arial";
+  ctx.fillText(title, margin.left, 26);
+  drawAxes(ctx, margin, plotW, plotH);
+
+  bins.forEach((bin, index) => {
+    const x = margin.left + (plotW / bins.length) * index + (plotW / bins.length - barW) / 2;
+    const barH = plotH * (bin.count / max);
+    const y = margin.top + plotH - barH;
+    ctx.fillStyle = "#6f58c9";
+    ctx.fillRect(x, y, barW, barH);
+    ctx.fillStyle = "#5c667a";
+    ctx.font = "12px Segoe UI, Arial";
+    ctx.fillText(String(bin.count), x + barW / 2 - 4, y - 6);
+    ctx.save();
+    ctx.translate(x + barW / 2, margin.top + plotH + 16);
+    ctx.rotate(-Math.PI / 6);
+    ctx.fillText(bin.label, -28, 0);
+    ctx.restore();
+  });
+
+  ctx.fillStyle = "#5c667a";
+  ctx.font = "12px Segoe UI, Arial";
+  ctx.fillText(columnName, margin.left + plotW - 90, height - 15);
+}
+
+function drawPieChart(canvas, data, title, metricName) {
+  const ctx = canvas.getContext("2d");
+  const width = canvas.width;
+  const height = canvas.height;
+  ctx.clearRect(0, 0, width, height);
+  drawCanvasBackground(ctx, width, height);
+
+  if (!data.length) {
+    clearCanvas(canvas, t("canvas.pie"));
+    return;
+  }
+
+  const colors = ["#2754c5", "#177a5b", "#a76100", "#6f58c9", "#b42318", "#2684a6"];
+  const total = data.reduce((sum, item) => sum + item.value, 0);
+  const radius = Math.min(width, height) * 0.28;
+  const centerX = width * 0.35;
+  const centerY = height * 0.55;
+  let start = -Math.PI / 2;
+
+  ctx.fillStyle = "#172033";
+  ctx.font = "700 16px Segoe UI, Arial";
+  ctx.fillText(title, 64, 28);
+
+  data.slice(0, 6).forEach((item, index) => {
+    const angle = total ? (item.value / total) * Math.PI * 2 : 0;
+    ctx.beginPath();
+    ctx.moveTo(centerX, centerY);
+    ctx.arc(centerX, centerY, radius, start, start + angle);
+    ctx.closePath();
+    ctx.fillStyle = colors[index % colors.length];
+    ctx.fill();
+    start += angle;
+  });
+
+  data.slice(0, 6).forEach((item, index) => {
+    const y = 82 + index * 32;
+    ctx.fillStyle = colors[index % colors.length];
+    ctx.fillRect(width * 0.65, y - 12, 16, 16);
+    ctx.fillStyle = "#314365";
+    ctx.font = "13px Segoe UI, Arial";
+    const percent = total ? formatNumber(item.value / total * 100) : 0;
+    ctx.fillText(`${item.label}: ${percent}%`, width * 0.65 + 24, y);
+  });
+
+  ctx.fillStyle = "#5c667a";
+  ctx.font = "12px Segoe UI, Arial";
+  ctx.fillText(metricName, 8, 22);
+}
+
+function drawLineChart(canvas, trend, title, metricName) {
+  const ctx = canvas.getContext("2d");
+  const width = canvas.width;
+  const height = canvas.height;
+  ctx.clearRect(0, 0, width, height);
+  drawCanvasBackground(ctx, width, height);
+
+  if (trend.length < 2) {
+    clearCanvas(canvas, t("canvas.line"));
+    return;
+  }
+
+  const margin = { top: 44, right: 32, bottom: 74, left: 64 };
+  const plotW = width - margin.left - margin.right;
+  const plotH = height - margin.top - margin.bottom;
+  const values = trend.map((point) => point.value);
+  const minY = Math.min(...values);
+  const maxY = Math.max(...values);
+
+  ctx.fillStyle = "#172033";
+  ctx.font = "700 16px Segoe UI, Arial";
+  ctx.fillText(title, margin.left, 26);
+  drawAxes(ctx, margin, plotW, plotH);
+
+  ctx.strokeStyle = "#2754c5";
+  ctx.lineWidth = 3;
+  ctx.beginPath();
+  trend.forEach((point, index) => {
+    const x = margin.left + (trend.length === 1 ? plotW / 2 : (plotW / (trend.length - 1)) * index);
+    const y = margin.top + plotH - scale(point.value, minY, maxY, plotH);
+    if (index === 0) {
+      ctx.moveTo(x, y);
+    } else {
+      ctx.lineTo(x, y);
+    }
+  });
+  ctx.stroke();
+
+  trend.forEach((point, index) => {
+    const x = margin.left + (trend.length === 1 ? plotW / 2 : (plotW / (trend.length - 1)) * index);
+    const y = margin.top + plotH - scale(point.value, minY, maxY, plotH);
+    ctx.fillStyle = "#177a5b";
+    ctx.beginPath();
+    ctx.arc(x, y, 5, 0, Math.PI * 2);
+    ctx.fill();
+    if (index === 0 || index === trend.length - 1 || trend.length <= 6) {
+      ctx.fillStyle = "#5c667a";
+      ctx.font = "12px Segoe UI, Arial";
+      ctx.save();
+      ctx.translate(x, margin.top + plotH + 16);
+      ctx.rotate(-Math.PI / 6);
+      ctx.fillText(point.label, -24, 0);
+      ctx.restore();
+    }
+  });
+
+  ctx.fillStyle = "#5c667a";
+  ctx.font = "12px Segoe UI, Arial";
+  ctx.fillText(metricName, 8, 22);
+}
+
+function drawAxes(ctx, margin, plotW, plotH) {
+  ctx.strokeStyle = "#c8d3e3";
+  ctx.lineWidth = 1;
+  ctx.beginPath();
+  ctx.moveTo(margin.left, margin.top);
+  ctx.lineTo(margin.left, margin.top + plotH);
+  ctx.lineTo(margin.left + plotW, margin.top + plotH);
+  ctx.stroke();
 }
 
 function drawCanvasBackground(ctx, width, height) {
@@ -1866,6 +2275,7 @@ function readInput() {
     csv: elements.csvText.value.trim(),
     question: elements.question.value.trim() || t("fallback.question"),
     selectedSteps: [...document.querySelectorAll('input[name="analysisStep"]:checked')].map((input) => input.value),
+    chartTypes: [...document.querySelectorAll('input[name="chartType"]:checked')].map((input) => input.value),
     customStep: elements.customStep.value.trim(),
     llm
   };
