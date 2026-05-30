@@ -2,19 +2,7 @@
 
 DataLens is a small intelligent software agent prototype for Assignment 2. It takes a CSV file, perceives the dataset structure, chooses analysis steps, executes those steps, creates plots, and summarizes findings.
 
-## Repository link
 
-Replace this line after uploading the folder to GitHub:
-
-`https://github.com/your-username/datalens-agent`
-
-## Demo video
-
-Suggested GitHub README link after recording/uploading the two-minute demo:
-
-`demo/datalens_demo.mp4`
-
-A short demo script is included at [demo/demo_script.md](demo/demo_script.md).
 
 ## How to run
 
@@ -123,7 +111,3 @@ The API key is not stored in this repository. It is saved only in the current br
 ## Commit checkpoint guide
 
 The local repository contains checkpoint-style commits showing design evolution and improvements. The final commit switches the project to the DataLens CSV analysis agent.
-
-## Notes for submission
-
-Before final upload, create a GitHub repository, push this folder, update the repository link above, and record or upload the two-minute demo video. The generated PDF report is in [report/Assignment2_DataLens_Report.pdf](report/Assignment2_DataLens_Report.pdf).
