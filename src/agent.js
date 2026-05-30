@@ -2,9 +2,9 @@ const storageKey = "datalens.memory.v1";
 const llmStorageKey = "datalens.llm.config.v1";
 const languageStorageKey = "datalens.language.v1";
 const defaultLlmUrl = "/api/llm";
-const defaultLlmModel = "gpt-5-codex";
+const defaultLlmModel = "qwen-plus";
 const oldDirectLlmUrl = "https://sorryios.ai/codex";
-const oldDefaultLlmModel = "gpt-4o-mini";
+const oldDefaultLlmModels = new Set(["gpt-4o-mini", "gpt-5-codex"]);
 
 const sampleCsv = `total_bill,tip,sex,smoker,day,time,size
 16.99,1.01,Female,No,Sun,Dinner,2
@@ -2320,7 +2320,7 @@ function hydrateLlmConfig() {
     } else {
       elements.llmUrl.value = defaultLlmUrl;
     }
-    if (saved.model && saved.model !== oldDefaultLlmModel) {
+    if (saved.model && !oldDefaultLlmModels.has(saved.model)) {
       elements.llmModel.value = saved.model;
     } else {
       elements.llmModel.value = defaultLlmModel;

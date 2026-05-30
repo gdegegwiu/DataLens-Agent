@@ -18,12 +18,14 @@ else:
     ROOT = Path(__file__).resolve().parents[1]
 HOST = "127.0.0.1"
 PORT = int(os.environ.get("DATALENS_PORT", "8787"))
-TARGET_URL = os.environ.get("DATALENS_LLM_URL", "https://sorryios.ai/codex").rstrip("/")
+DEFAULT_TARGET_URL = "https://dashscope.aliyuncs.com/compatible-mode/v1"
+TARGET_URL = os.environ.get("DATALENS_LLM_URL", DEFAULT_TARGET_URL).rstrip("/")
 
 
 def llm_endpoint_candidates(raw_url: str) -> list[tuple[str, str]]:
     clean = raw_url.rstrip("/")
     candidates: list[tuple[str, str]] = []
+    prefer_chat = "dashscope" in clean or "compatible-mode" in clean
 
     def add(kind: str, url: str) -> None:
         item = (kind, url)
@@ -37,14 +39,24 @@ def llm_endpoint_candidates(raw_url: str) -> list[tuple[str, str]]:
         add("chat", clean)
         return candidates
     if clean.endswith("/v1"):
-        add("responses", f"{clean}/responses")
-        add("chat", f"{clean}/chat/completions")
+        if prefer_chat:
+            add("chat", f"{clean}/chat/completions")
+            add("responses", f"{clean}/responses")
+        else:
+            add("responses", f"{clean}/responses")
+            add("chat", f"{clean}/chat/completions")
         return candidates
 
-    add("responses", f"{clean}/v1/responses")
-    add("responses", f"{clean}/responses")
-    add("chat", f"{clean}/v1/chat/completions")
-    add("chat", f"{clean}/chat/completions")
+    if prefer_chat:
+        add("chat", f"{clean}/v1/chat/completions")
+        add("chat", f"{clean}/chat/completions")
+        add("responses", f"{clean}/v1/responses")
+        add("responses", f"{clean}/responses")
+    else:
+        add("responses", f"{clean}/v1/responses")
+        add("responses", f"{clean}/responses")
+        add("chat", f"{clean}/v1/chat/completions")
+        add("chat", f"{clean}/chat/completions")
     add("chat", clean)
     return candidates
 
