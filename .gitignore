@@ -8,3 +8,7 @@ goalpilot-agent-run.json
 # Temporary rendering files
 *.tmp
 *.log
+
+# PyInstaller temporary build output
+build/
+*.spec

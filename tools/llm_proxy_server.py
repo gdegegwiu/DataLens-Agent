@@ -2,13 +2,20 @@ from __future__ import annotations
 
 import json
 import os
+import sys
+import threading
+import time
+import webbrowser
 from http.server import SimpleHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 from urllib.error import HTTPError, URLError
 from urllib.request import Request, urlopen
 
 
-ROOT = Path(__file__).resolve().parents[1]
+if getattr(sys, "frozen", False):
+    ROOT = Path(sys.executable).resolve().parent
+else:
+    ROOT = Path(__file__).resolve().parents[1]
 HOST = "127.0.0.1"
 PORT = int(os.environ.get("DATALENS_PORT", "8787"))
 TARGET_URL = os.environ.get("DATALENS_LLM_URL", "https://sorryios.ai/codex").rstrip("/")
@@ -87,11 +94,26 @@ class DataLensHandler(SimpleHTTPRequestHandler):
 
 
 def main() -> None:
-    server = ThreadingHTTPServer((HOST, PORT), DataLensHandler)
-    print(f"DataLens server: http://{HOST}:{PORT}/index.html")
+    url = f"http://{HOST}:{PORT}/index.html"
+    try:
+        server = ThreadingHTTPServer((HOST, PORT), DataLensHandler)
+    except OSError:
+        print(f"DataLens appears to be running already: {url}")
+        open_browser(url)
+        input("Press Enter to close this launcher window.")
+        return
+
+    print(f"DataLens server: {url}")
     print(f"LLM proxy target: {TARGET_URL}")
     print("Press Ctrl+C to stop.")
+    if "--no-open" not in sys.argv:
+        threading.Thread(target=open_browser, args=(url,), daemon=True).start()
     server.serve_forever()
+
+
+def open_browser(url: str) -> None:
+    time.sleep(0.8)
+    webbrowser.open(url)
 
 
 if __name__ == "__main__":

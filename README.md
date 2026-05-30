@@ -20,6 +20,14 @@ A short demo script is included at [demo/demo_script.md](demo/demo_script.md).
 
 No installation is required for deterministic local analysis.
 
+### One-click Windows launcher
+
+On Windows, double-click [DataLensAgent.exe](DataLensAgent.exe). It starts the local server and opens the app at `http://127.0.0.1:8787/index.html`.
+
+Keep the launcher window open while using the app. Close that window when you want to stop the local server.
+
+### Manual browser mode
+
 1. Download or clone this repository.
 2. Open [index.html](index.html) in a modern browser.
 3. Use the language selector to switch between English, Chinese, and Māori.
@@ -33,7 +41,7 @@ Extra comparison datasets are in [data](data): `iris.csv` and the full `tips.csv
 
 ## Optional LLM mode
 
-The agent can run without an LLM, but it also supports an OpenAI-compatible chat-completions API. Most API relay services do not allow direct browser CORS requests, so LLM mode should be run through the included local proxy server.
+The agent can run without an LLM, but it also supports an OpenAI-compatible chat-completions API. Most API relay services do not allow direct browser CORS requests, so LLM mode should be run through `DataLensAgent.exe` or the included local proxy server.
 
 1. Start the local server:
 
@@ -64,6 +72,7 @@ The proxy forwards `/api/llm` to `https://sorryios.ai/codex` by default. To use 
 
 ```text
 .
+|-- DataLensAgent.exe
 |-- index.html
 |-- data/
 |   |-- iris.csv

@@ -3,6 +3,7 @@
 *.jpg binary
 *.jpeg binary
 *.gif binary
+*.exe binary
 *.svg text eol=lf
 *.html text eol=lf
 *.css text eol=lf
