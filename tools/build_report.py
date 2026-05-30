@@ -175,9 +175,9 @@ def draw_architecture(c: canvas.Canvas, x: float, y: float, w: float, h: float) 
 def prepare_report_images() -> dict[str, Path]:
     source = SCREENSHOT_DIR / "01-datalens-analysis.png"
     crops = {
-        "workspace": (310, 185, 1105, 930),
-        "charts": (320, 520, 1095, 1470),
-        "summary": (320, 2700, 1100, 3430),
+        "workspace": (310, 185, 1105, 1760),
+        "charts": (320, 1760, 1095, 2860),
+        "summary": (320, 2860, 1100, 3430),
     }
     output = {}
     with Image.open(source) as image:

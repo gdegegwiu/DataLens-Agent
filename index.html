@@ -95,20 +95,6 @@
             </article>
           </div>
 
-          <div class="chart-grid">
-            <article class="surface chart-card">
-              <h3 data-i18n="heading.mainPlot">Main plot</h3>
-              <canvas id="barChart" width="900" height="460" aria-label="Main generated chart" data-i18n-aria-label="aria.mainChart"></canvas>
-              <p id="barInsight" class="chart-insight" data-i18n="insight.main.empty">Run the agent to see the main chart analysis.</p>
-            </article>
-
-            <article class="surface chart-card">
-              <h3 data-i18n="heading.relationshipPlot">Relationship plot</h3>
-              <canvas id="scatterChart" width="900" height="420" aria-label="Relationship chart" data-i18n-aria-label="aria.relationshipChart"></canvas>
-              <p id="scatterInsight" class="chart-insight" data-i18n="insight.relationship.empty">Run the agent to see the relationship analysis.</p>
-            </article>
-          </div>
-
           <article class="plan-surface">
             <div class="section-title">
               <h3 data-i18n="heading.steps">Chosen analysis steps</h3>
@@ -157,6 +143,20 @@
               <li class="empty-state" data-i18n="empty.steps">The agent will choose analysis steps after reading the CSV.</li>
             </ol>
           </article>
+
+          <div class="chart-grid">
+            <article class="surface chart-card">
+              <h3 data-i18n="heading.mainPlot">Main plot</h3>
+              <canvas id="barChart" width="900" height="460" aria-label="Main generated chart" data-i18n-aria-label="aria.mainChart"></canvas>
+              <p id="barInsight" class="chart-insight" data-i18n="insight.main.empty">Run the agent to see the main chart analysis.</p>
+            </article>
+
+            <article class="surface chart-card">
+              <h3 data-i18n="heading.relationshipPlot">Relationship plot</h3>
+              <canvas id="scatterChart" width="900" height="420" aria-label="Relationship chart" data-i18n-aria-label="aria.relationshipChart"></canvas>
+              <p id="scatterInsight" class="chart-insight" data-i18n="insight.relationship.empty">Run the agent to see the relationship analysis.</p>
+            </article>
+          </div>
 
           <article class="surface total-summary">
             <h3 data-i18n="heading.overallSummary">Overall summary</h3>
