@@ -99,6 +99,8 @@ The API key is not stored in this repository. It is saved only in the current br
 |   `-- styles.css
 |-- assets/
 |   `-- system-design.svg
+|-- Demo_video/
+|   `-- DEMO.mp4
 |-- screenshots/
 |-- report/
 |-- demo/
