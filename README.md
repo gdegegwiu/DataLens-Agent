@@ -103,8 +103,7 @@ The API key is not stored in this repository. It is saved only in the current br
 |   `-- DEMO.mp4
 |-- screenshots/
 |-- report/
-|-- demo/
-|   `-- demo_script.md
+|   `-- Report.pdf
 `-- tools/
     |-- build_report.py
     `-- llm_proxy_server.py
